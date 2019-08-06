@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="DKT TCN 深度学习,">
+  <meta name="keywords" content="DKT,TCN,">
 
 
 
@@ -81,22 +81,22 @@
 
 
 
-<meta name="description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列$x _ { 0 } ,  \ldots \ldots , x _">
-<meta name="keywords" content="DKT TCN 深度学习">
+<meta name="description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
+<meta name="keywords" content="DKT,TCN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度知识追踪">
 <meta property="og:url" content="http://yoursite.com/2019/08/06/深度知识追踪/index.html">
 <meta property="og:site_name" content="数据挖掘日常笔记">
-<meta property="og:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列$x _ { 0 } ,  \ldots \ldots , x _">
+<meta property="og:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20181125121753468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20181126140804381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190805165657400.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190805135005548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-08-06T10:53:20.307Z">
+<meta property="og:updated_time" content="2019-08-06T11:08:37.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度知识追踪">
-<meta name="twitter:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列$x _ { 0 } ,  \ldots \ldots , x _">
+<meta name="twitter:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181125121753468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 
 
@@ -107,7 +107,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -153,7 +153,11 @@
   
 
   <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
+    <div class="headband">
+      <a href="https://github.com/sulingling123">
+      <img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_gray_6d6d6d.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1">
+       </a>
+    </div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
@@ -168,7 +172,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">Zoe的博客 | Blog</p>
+        <p class="site-subtitle">Zoe的博客 | Zoe Blog</p>
       
   </div>
 
@@ -275,7 +279,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zoe">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -310,6 +314,39 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/Knowledge-Tracing/" itemprop="url" rel="index">
+                    <span itemprop="name">Knowledge Tracing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -338,7 +375,7 @@
 
       
         <h1 id="深度知识追踪（Deep-Knowledge-Tracing）"><a href="#深度知识追踪（Deep-Knowledge-Tracing）" class="headerlink" title="深度知识追踪（Deep Knowledge Tracing）"></a>深度知识追踪（Deep Knowledge Tracing）</h1><p>知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。</p>
-<p>知识追踪问题可以描述为： 给定一学生的观测序列$x _ { 0 } ,  \ldots \ldots , x _ { t }$预测下次表现$x_{t+1}$，通常$\mathbf { x } _ { t } = \left\{ q _ { t } , a _ { t } \right\}$，其中$q _ { t }$代表回答的问题成分（如对应的知识点），$a _ { t }$代表对应的回答是否正确，通常$a _ { t }=\left\{0,1\right\}$。 下图描述了一个学生在八年级数学中的知识追踪结果可视化展示。<br><img src="https://img-blog.csdnimg.cn/20181125121753468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>传统的知识追踪是基于一阶马尔可夫模型，如<a href="https://www.cs.cmu.edu/~ggordon/yudelson-koedinger-gordon-individualized-bayesian-knowledge-tracing.pdf" target="_blank" rel="noopener">贝叶斯知识追踪</a>(Bayesian Knowledge Tracing)，2015年 <a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Chris Piech</a> 等人提出利用深度学习来处理知识追踪的任务，之后引发了学者们对利用深度学习来处理知识追踪任务对不断探讨，下面依次介绍相关论文核心内容及思考。</p>
+<p>知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现$x_{t+1}$，通常$\mathbf { x } _ { t } = \left\{ q _ { t } , a _ { t } \right\}$，其中$q _ { t }$代表回答的问题成分（如对应的知识点），$a _ { t }$代表对应的回答是否正确，通常$a _ { t }=\left\{0,1\right\}$。 下图描述了一个学生在八年级数学中的知识追踪结果可视化展示。<br><img src="https://img-blog.csdnimg.cn/20181125121753468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>传统的知识追踪是基于一阶马尔可夫模型，如<a href="https://www.cs.cmu.edu/~ggordon/yudelson-koedinger-gordon-individualized-bayesian-knowledge-tracing.pdf" target="_blank" rel="noopener">贝叶斯知识追踪</a>(Bayesian Knowledge Tracing)，2015年 <a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Chris Piech</a> 等人提出利用深度学习来处理知识追踪的任务，之后引发了学者们对利用深度学习来处理知识追踪任务对不断探讨，下面依次介绍相关论文核心内容及思考。</p>
 <h2 id="Deep-Knowledge-Tracing"><a href="#Deep-Knowledge-Tracing" class="headerlink" title="Deep Knowledge Tracing"></a>Deep Knowledge Tracing</h2><p>循环神经网络（RNN）是一种时间序列的模型，天然具有高维连续的隐状态表示的特征，RNN能够利用早期的信息进行预测，因此在2015年 <a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Chris Piech</a> 将RNN应用于知识追踪领域，并取得了较好的结果。</p>
 <h3 id="模型："><a href="#模型：" class="headerlink" title="模型："></a>模型：</h3><p>文章中，作者采用了传统的RNN模型和其变种LSTM，其输入数据为经过编码的$q _ { t }$，输出为$a _ { t }$。对于输入的编码方式有两种：</p>
 <ol>
@@ -418,12 +455,32 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
 
     
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Zoe
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/08/06/深度知识追踪/" title="深度知识追踪">http://yoursite.com/2019/08/06/深度知识追踪/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/DKT-TCN-深度学习/" rel="tag"># DKT TCN 深度学习</a>
+            <a href="/tags/DKT/" rel="tag"># DKT</a>
+          
+            <a href="/tags/TCN/" rel="tag"># TCN</a>
           
         </div>
       
@@ -510,6 +567,8 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Zoe">
+            
               <p class="site-author-name" itemprop="name">Zoe</p>
               <p class="site-description motion-element" itemprop="description">Every failure is leading towards success.</p>
           </div>
@@ -528,15 +587,24 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
 
             
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">1</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">tags</span>
-                
+                </a>
               </div>
             
 
@@ -582,6 +650,13 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -629,11 +704,6 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
     
