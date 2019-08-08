@@ -267,6 +267,228 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/" itemprop="url">阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-08T15:32:00+08:00">
+                2019-08-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T15:24:52+08:00">
+                2019-08-08
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/阿里云/" itemprop="url" rel="index">
+                    <span itemprop="name">阿里云</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/阿里云/pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">pytorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  269
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-阿里云ECS-默认安装cuda-9-1版本"><a href="#1-阿里云ECS-默认安装cuda-9-1版本" class="headerlink" title="1.阿里云ECS 默认安装cuda 9.1版本"></a>1.阿里云ECS 默认安装cuda 9.1版本</h3><ul>
+<li>确定cuda版本： <ul>
+<li>首先使用nvidia -smi 查看显卡驱动运行状态</li>
+<li>使用nvcc -V查看cuda-toolkit安装是否成功<ul>
+<li>若显示nvcc命令不存在：<ul>
+<li>使用whereis cuda 查看cuda路径</li>
+<li>在～/.bashrc 中加入：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=/usr/local/cuda/bin:$PATH </span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>source ～/.bashrc 命令使环境变量生效    </p>
+<h3 id="2-安装Anaconda："><a href="#2-安装Anaconda：" class="headerlink" title="2.  安装Anaconda："></a>2.  安装Anaconda：</h3><p> <a href="https://repo.anaconda.com/archive/" target="_blank" rel="noopener">https://repo.anaconda.com/archive/</a>   版本 Anaconda3-5.1.0-Linux-x86_64.sh</p>
+<h3 id="3-安装cudnn："><a href="#3-安装cudnn：" class="headerlink" title="3. 安装cudnn："></a>3. 安装cudnn：</h3><p>从官网下载 <a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a><br>解压tar -xzvf cudnn-9.1-linux-x64-v7.1.tgz<br>copy到对应cuda文件夹下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include</span><br><span class="line">sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64</span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure></p>
+<p>查看cudnn版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A5</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-安装pytorch"><a href="#4-安装pytorch" class="headerlink" title="4. 安装pytorch"></a>4. 安装pytorch</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch torchvision cuda91 -c pytorch</span><br></pre></td></tr></table></figure>
+<p>⚠️： 若不成功，可以查看pytorch 版本，可以更改pytorch版本：(实测可用)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==0.4.1</span><br><span class="line">pip install torchvision==0.2.2</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-检查安装是否成功："><a href="#5-检查安装是否成功：" class="headerlink" title="5. 检查安装是否成功："></a>5. 检查安装是否成功：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">import torch</span><br><span class="line">torch.cuda.is_available()</span><br></pre></td></tr></table></figure>
+<p>【参考文章】：</p>
+<ol>
+<li><a href="https://blog.csdn.net/qq_29762941/article/details/80630585" target="_blank" rel="noopener">https://blog.csdn.net/qq_29762941/article/details/80630585</a></li>
+<li><a href="https://blog.csdn.net/qq_29762941/article/details/80630585" target="_blank" rel="noopener">https://blog.csdn.net/qq_29762941/article/details/80630585</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/06/深度知识追踪/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -314,7 +536,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T10:41:48+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T15:08:58+08:00">
                 2019-08-08
               </time>
             
@@ -375,7 +597,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  3.7k
+                  4.9k
                 </span>
               
 
@@ -391,7 +613,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  14
+                  19
                 </span>
               
             </div>
@@ -426,7 +648,7 @@
 <h3 id="模型优缺点："><a href="#模型优缺点：" class="headerlink" title="模型优缺点："></a>模型优缺点：</h3><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ol>
 <li>能够反应长时间的知识关系，基于RNN的特性能够根据学生近期学习表现进行预测（<a href="https://arxiv.org/pdf/1604.02416.pdf" target="_blank" rel="noopener">近因效应</a>），也能根据实际学生学习路径进行建模；</li>
 <li>能够对复杂的知识点之间的联系进行建模，如构建知识图谱；</li>
-<li>能够处理多知识成分的问题。<h4 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">缺点：</a></h4></li>
+<li>能够处理多知识成分的问题。<h5 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">缺点：</a></h5></li>
 <li>模型无法重构输入，即输入某一知识成分答题错误，模型对该知识成分的预测反而是正确。</li>
 <li>在时间序列上，学生对知识点的掌握程度不具有连续一致性，波动情况较大。</li>
 </ol>
@@ -473,10 +695,33 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
 <li>第二部分，对应于知识结构的前置约束，其中$\delta ( * ) =\delta \left( y _ { i , \pi \left( i , t _ { 1 } \right) , t _ { 1 } } = y _ { i , \pi \left( i , t _ { 2 } \right) , t _ { 2 } } \right)$，即只有前后两个时刻的answer一致且存在前后置关系时，第二部分的正则才会有效。</li>
 </ul>
 <p>最终实验结果表明，加入知识结构信息的model比原始DKT结果要好，具体详见paper。<br>(PS: 笔者在本公司的数据集上验证并没有得到提升😢)</p>
+<h2 id="EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><a href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction"></a>EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</h2><p>这篇<a href="https://arxiv.org/pdf/1906.05658.pdf" target="_blank" rel="noopener">文章</a>很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Exercise-Enhanced Recurrent Neural Network(EERNN)，在这个模型中，不仅使用了学生的做题记录，还引入了习题的文本信息。在EERNN中，作者使用RNN的隐变量来表征学生的学习轨迹，使用BiLSTM来学习习题的编码信息。在最终predict阶段，作者在EERNN基础上采用了两种策略，一种是EERNNM with Markov property,另一种是EERNNA with attention mechanism。最终为了追踪学生在各知识点上的掌握情况，作者将EERNN引入知识概念的信息引入得到Exercise-Aware Knowledge Tracing（EKT）。</p>
+<h3 id="模型：-1"><a href="#模型：-1" class="headerlink" title="模型："></a>模型：</h3><p>模型主要分两部分来描述，一是做预测的EERNN（EERNNM &amp; EERNNA），另一部分是追踪学生知识掌握情况的EKT。</p>
+<h4 id="EERNN"><a href="#EERNN" class="headerlink" title="EERNN"></a>EERNN</h4><p>EERNN的提出主要用于做学生performance的预测，基于不同的策略又分为EERNNM和EERNNA。网络结果如下图所示：</p>
+<p><img src="/source/images/EERNN.jpg" alt="EERNN"></p>
+<p>从上图可以看出：EERNNM和EERNNA的区别主要在prediction阶段，图中橘色框表示的是题目的embeddig，蓝色框表示的是学生的embedding。</p>
+<h5 id="Exercise-embedding"><a href="#Exercise-embedding" class="headerlink" title="Exercise embedding:"></a>Exercise embedding:</h5><p>Exercise embedding的获取是通过双向LSTM得到的，结构如下：<br><img src="/source/images/EERNN-1.jpg" alt="EERNN"></p>
+<p>通过上述可以得到每个word的embedding $v_{m}=$ concatenate $\left(\vec{v}_{m}, \overleftarrow v_{m}\right)$，最终Exercise的embedding是通过max-pooling每个word的embedding得到，即$x_{i}=\max \left(v_{1}, v_{2}, \ldots, v_{M}\right) x_{i} \in \mathbb{R}^{2 d_{v}}$。</p>
+<h5 id="Student-Embedding："><a href="#Student-Embedding：" class="headerlink" title="Student Embedding："></a>Student Embedding：</h5><p>表征学生的向量应该跟题目和学生的回答有关，因此作者在上面获得$x_{i}$的基础上加入了表示学生作答情况的信息，通过RNN/LSTM得到student embedding，具体实现是首先将$r_{t}$表示成一个$2 d_{v}$维的$\mathbf{0}=(0,0, \ldots, 0)$，最终输入$\widetilde{x}_{t} \in \mathbb{R}^{4 d_{v}}$表示为：<center>$\widetilde{x}_{t}=\left\{\begin{array}{ll}{\left[x_{t} \oplus \mathbf{0}\right]} & {\text { if } r_{t}=1} \\ {\left[\mathbf{0} \oplus x_{t}\right]} & {\text { if } \quad r_{t}=0}\end{array}\right.$</center></p>
+<h5 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h5><ul>
+<li><p>EERNNM:</p>
+<p>基于markov性，下一时刻状态的条件概率分布只与当前状态有关，因此对$\widetilde{r}_{T+1}$的预测只与$h_{T}$和$x_{T+1}$有关，因此计算公式如下：<center>$\begin{aligned} y_{T+1} &=\operatorname{Re} L U\left(\mathbf{W}_{1} \cdot\left[h_{T} \oplus x_{T+1}\right]+\mathbf{b}_{1}\right) \\ \widetilde{r}_{T+1} &=\sigma\left(\mathbf{W}_{2} \cdot y_{T+1}+\mathbf{b}_{2}\right) \end{aligned}$</center></p>
+</li>
+<li><p>EERNNA</p>
+</li>
+</ul>
 <h2 id="A-Self-Attentive-model-for-Knowledge-Tracing"><a href="#A-Self-Attentive-model-for-Knowledge-Tracing" class="headerlink" title="A Self-Attentive model for Knowledge Tracing"></a>A Self-Attentive model for Knowledge Tracing</h2><p>该模型是<a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">Shalini Pandey</a>等人在2019年7月post出来的论文，核心就是将Transformer引入只是追踪领域代替LSTM/RNN。该论文将Transformer引入后的model称为SAKT，模型架构如下：</p>
-<p><img src="/Users/linglingsu/Documents/blog/source/images/avatar.jpeg" alt="SAKT"></p>
+<p> <img src="/source/images/SAKT.jpg" alt="SAKT"></p>
+<p>模型的核心架构跟Transformer一致（对于Transformer的结构和理解，这里不多讲，请自行学习），都主要包括multi-head attention (对应文章的self-attention layer)，feed forward layer, residual connections, layer normalization 和prediction layer。重点的区别在于attention layer的输入embedding上。Transormer的输入是input经过embedding再加上Position Encoding，而本文章的输入有两部分， 一部分是用户reation的，即用户做了哪些题目以及做对做错$\mathbf{x}_{t}=\left(e_{t}, r_{t}\right)$,其中$e_{t}$表示t时刻学生做的题目，$r_{t}$表示学生t时刻的做题正误； 另一部分仅仅是题目即$e_{t}$，作者用$x_{i}$的embedding作为key和value，而$e_{t}$作为query，具体如下图所示：</p>
+<p> <img src="/source/images/SAKT-1.jpg" alt="SAKT"></p>
+<p>上图中，$x_{i}$经过interaction Embedding（通过Embedding Table ）得到embedding $\mathbf{M} \in \mathbb{R}^{2 E \times d}$，再经过Position Encodiing得到包含位置信息的embedding $\mathbb{P}$，最终输入Attention Layer的输入为$\hat{\mathbf{M}} = \mathbf{M} + \hat{\mathbf{P}}$。</p>
+<p>而$e_{t}$通过Question Embedding（Embedding table）得到$\mathbf{E} \in \mathbb{R}^{E \times d}$,没有经过Position Encodiing，最终<br>$\hat{\mathbf{E}} = \mathbb{E}$。</p>
+<p>在Attention Layer计算Attention score时，$\mathbf{Q}=\hat{\mathbf{E}} \mathbf{W}^{Q}, \mathbf{K}=\hat{\mathbf{M}} \mathbf{W}^{K}, \mathbf{V}=\hat{\mathbf{M}} \mathbf{W}^{V}$,即Key=Value‡Query。 与Transformer的 Query= Key= Value不同。</p>
+<h3 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h3><p>论文最后对比了当前深度知识追踪中比较常见的集中模型，结果如下：</p>
+<p> <img src="/source/images/SAKT-2.jpg" alt="SAKT"></p>
+<h3 id="感想："><a href="#感想：" class="headerlink" title="感想："></a>感想：</h3><p>早在Transformer发表之初，笔者就将Transformer引入知识追踪，所以上述文章的创新性感觉一般，但是值得思考的是为什么作者在计算attention score时Key‡Query,以及实现时，多层堆叠下的输入问题。</p>
 <hr>
-<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h3><ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h2><ol>
 <li><a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Deep Knowledge Tracing</a></li>
 <li><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization</a></li>
 <li><a href="http://www.educationaldatamining.org/EDM2016/proceedings/paper_133.pdf" target="_blank" rel="noopener">Going Deeper with Deep Knowledge Tracing </a></li>
@@ -485,6 +730,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
 <li><a href="http://educationaldatamining.org/files/conferences/EDM2018/papers/EDM2018_paper_208.pdf" target="_blank" rel="noopener">Does Deep Knowledge Tracing Model Interactions Among Skills?</a></li>
 <li><a href="https://aic-fe.bnu.edu.cn/docs/20190109161907836283.pdf" target="_blank" rel="noopener">Prerequisite-Driven Deep Knowledge Tracing</a></li>
 <li><a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">A Self-Attentive model for Knowledge Tracing</a></li>
+<li><a href="https://arxiv.org/pdf/1906.05658.pdf" target="_blank" rel="noopener">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</a></li>
 </ol>
 
           
@@ -740,7 +986,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -751,7 +997,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -762,7 +1008,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -827,7 +1073,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">3.8k</span>
+    <span title="Site words total count">5.2k</span>
   
 </div>
 
