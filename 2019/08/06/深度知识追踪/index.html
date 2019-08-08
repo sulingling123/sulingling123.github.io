@@ -93,7 +93,8 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20181126140804381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190805165657400.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190805135005548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-08-06T11:08:37.208Z">
+<meta property="og:image" content="http://yoursite.com/Users/linglingsu/Documents/blog/source/images/avatar.jpeg">
+<meta property="og:updated_time" content="2019-08-08T02:31:40.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度知识追踪">
 <meta name="twitter:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
@@ -317,8 +318,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-06T19:08:37+08:00">
-                2019-08-06
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T10:31:40+08:00">
+                2019-08-08
               </time>
             
           </span>
@@ -474,7 +475,9 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
 <li>第二部分，对应于知识结构的前置约束，其中$\delta ( * ) =\delta \left( y _ { i , \pi \left( i , t _ { 1 } \right) , t _ { 1 } } = y _ { i , \pi \left( i , t _ { 2 } \right) , t _ { 2 } } \right)$，即只有前后两个时刻的answer一致且存在前后置关系时，第二部分的正则才会有效。</li>
 </ul>
 <p>最终实验结果表明，加入知识结构信息的model比原始DKT结果要好，具体详见paper。<br>(PS: 笔者在本公司的数据集上验证并没有得到提升😢)</p>
-<h2 id><a href="#" class="headerlink" title=" "></a> </h2><hr>
+<h2 id="A-Self-Attentive-model-for-Knowledge-Tracing"><a href="#A-Self-Attentive-model-for-Knowledge-Tracing" class="headerlink" title="A Self-Attentive model for Knowledge Tracing"></a>A Self-Attentive model for Knowledge Tracing</h2><p>该模型是<a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">Shalini Pandey</a>等人在2019年7月post出来的论文，核心就是将Transformer引入只是追踪领域代替LSTM/RNN。该论文将Transformer引入后的model称为SAKT，模型架构如下：</p>
+<p><img src="/Users/linglingsu/Documents/blog/source/images/avatar.jpeg" alt="SAKT"></p>
+<hr>
 <h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h3><ol>
 <li><a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Deep Knowledge Tracing</a></li>
 <li><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization</a></li>
@@ -483,6 +486,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
 <li><a href="https://arxiv.org/pdf/1806.03256.pdf" target="_blank" rel="noopener">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</a></li>
 <li><a href="http://educationaldatamining.org/files/conferences/EDM2018/papers/EDM2018_paper_208.pdf" target="_blank" rel="noopener">Does Deep Knowledge Tracing Model Interactions Among Skills?</a></li>
 <li><a href="https://aic-fe.bnu.edu.cn/docs/20190109161907836283.pdf" target="_blank" rel="noopener">Prerequisite-Driven Deep Knowledge Tracing</a></li>
+<li><a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">A Self-Attentive model for Knowledge Tracing</a></li>
 </ol>
 
       
@@ -683,7 +687,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深度知识追踪（Deep-Knowledge-Tracing）"><span class="nav-number">1.</span> <span class="nav-text">深度知识追踪（Deep Knowledge Tracing）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-Knowledge-Tracing"><span class="nav-number">1.1.</span> <span class="nav-text">Deep Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型："><span class="nav-number">1.1.1.</span> <span class="nav-text">模型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型优缺点："><span class="nav-number">1.1.2.</span> <span class="nav-text">模型优缺点：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点："><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">优点：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点："><span class="nav-number">1.1.2.1.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Going-Deeper-with-Deep-Knowledge-Tracing"><span class="nav-number">1.2.</span> <span class="nav-text">Going Deeper with Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization"><span class="nav-number">1.3.</span> <span class="nav-text">Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills"><span class="nav-number">1.4.</span> <span class="nav-text">Does Deep Knowledge Tracing Model Interactions Among Skills?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction"><span class="nav-number">1.5.</span> <span class="nav-text">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisite-Driven-Deep-Knowledge-Tracing"><span class="nav-number">1.6.</span> <span class="nav-text">Prerequisite-Driven Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.7.</span> <span class="nav-text"> </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">1.7.1.</span> <span class="nav-text">参考文献:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深度知识追踪（Deep-Knowledge-Tracing）"><span class="nav-number">1.</span> <span class="nav-text">深度知识追踪（Deep Knowledge Tracing）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-Knowledge-Tracing"><span class="nav-number">1.1.</span> <span class="nav-text">Deep Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型："><span class="nav-number">1.1.1.</span> <span class="nav-text">模型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型优缺点："><span class="nav-number">1.1.2.</span> <span class="nav-text">模型优缺点：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点："><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">优点：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点："><span class="nav-number">1.1.2.1.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Going-Deeper-with-Deep-Knowledge-Tracing"><span class="nav-number">1.2.</span> <span class="nav-text">Going Deeper with Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization"><span class="nav-number">1.3.</span> <span class="nav-text">Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills"><span class="nav-number">1.4.</span> <span class="nav-text">Does Deep Knowledge Tracing Model Interactions Among Skills?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction"><span class="nav-number">1.5.</span> <span class="nav-text">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisite-Driven-Deep-Knowledge-Tracing"><span class="nav-number">1.6.</span> <span class="nav-text">Prerequisite-Driven Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Self-Attentive-model-for-Knowledge-Tracing"><span class="nav-number">1.7.</span> <span class="nav-text">A Self-Attentive model for Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">1.7.1.</span> <span class="nav-text">参考文献:</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -724,7 +728,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">3.7k</span>
+    <span title="Site words total count">3.8k</span>
   
 </div>
 
