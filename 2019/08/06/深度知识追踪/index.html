@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="DKT,TCN,">
+  <meta name="keywords" content="Knowledge Tracing,">
 
 
 
@@ -82,7 +82,7 @@
 
 
 <meta name="description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
-<meta name="keywords" content="DKT,TCN">
+<meta name="keywords" content="Knowledge Tracing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度知识追踪">
 <meta property="og:url" content="http://yoursite.com/2019/08/06/深度知识追踪/index.html">
@@ -95,10 +95,11 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190805135005548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1pvZV9TdQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="http://yoursite.com/source/images/EERNN.jpg">
 <meta property="og:image" content="http://yoursite.com/source/images/EERNN-1.jpg">
+<meta property="og:image" content="http://yoursite.com/source/images/EKT.jpg">
 <meta property="og:image" content="http://yoursite.com/source/images/SAKT.jpg">
 <meta property="og:image" content="http://yoursite.com/source/images/SAKT-1.jpg">
 <meta property="og:image" content="http://yoursite.com/source/images/SAKT-2.jpg">
-<meta property="og:updated_time" content="2019-08-08T07:08:58.322Z">
+<meta property="og:updated_time" content="2019-08-08T09:22:09.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度知识追踪">
 <meta name="twitter:description" content="深度知识追踪（Deep Knowledge Tracing）知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。 知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现">
@@ -322,7 +323,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T15:08:58+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T17:22:09+08:00">
                 2019-08-08
               </time>
             
@@ -352,8 +353,19 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deeplearning/Knowledge-Tracing/" itemprop="url" rel="index">
-                    <span itemprop="name">Knowledge Tracing</span>
+                  <a href="/categories/Deeplearning/DKT/" itemprop="url" rel="index">
+                    <span itemprop="name">DKT</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/DKT/TCN/" itemprop="url" rel="index">
+                    <span itemprop="name">TCN</span>
                   </a>
                 </span>
 
@@ -383,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  4.9k
+                  5.3k
                 </span>
               
 
@@ -399,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  19
+                  21
                 </span>
               
             </div>
@@ -489,11 +501,13 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
 <h5 id="Student-Embedding："><a href="#Student-Embedding：" class="headerlink" title="Student Embedding："></a>Student Embedding：</h5><p>表征学生的向量应该跟题目和学生的回答有关，因此作者在上面获得$x_{i}$的基础上加入了表示学生作答情况的信息，通过RNN/LSTM得到student embedding，具体实现是首先将$r_{t}$表示成一个$2 d_{v}$维的$\mathbf{0}=(0,0, \ldots, 0)$，最终输入$\widetilde{x}_{t} \in \mathbb{R}^{4 d_{v}}$表示为：<center>$\widetilde{x}_{t}=\left\{\begin{array}{ll}{\left[x_{t} \oplus \mathbf{0}\right]} & {\text { if } r_{t}=1} \\ {\left[\mathbf{0} \oplus x_{t}\right]} & {\text { if } \quad r_{t}=0}\end{array}\right.$</center></p>
 <h5 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h5><ul>
 <li><p>EERNNM:</p>
-<p>基于markov性，下一时刻状态的条件概率分布只与当前状态有关，因此对$\widetilde{r}_{T+1}$的预测只与$h_{T}$和$x_{T+1}$有关，因此计算公式如下：<center>$\begin{aligned} y_{T+1} &=\operatorname{Re} L U\left(\mathbf{W}_{1} \cdot\left[h_{T} \oplus x_{T+1}\right]+\mathbf{b}_{1}\right) \\ \widetilde{r}_{T+1} &=\sigma\left(\mathbf{W}_{2} \cdot y_{T+1}+\mathbf{b}_{2}\right) \end{aligned}$</center></p>
+<p>基于markov性，下一时刻状态的条件概率分布只与当前状态有关，因此对$\widetilde{r}_{T+1}$的预测只与$h_{T}$和$x_{T+1}$有关，因此计算公式如下：<center>$\begin{aligned} y_{T+1} &=\operatorname{Re} L U\left(\mathbf{W}_{1} \cdot\left[h_{T} \oplus x_{T+1}\right]+\mathbf{b}_{1}\right) \\ \widetilde{r}_{T+1} &=\sigma\left(\mathbf{W}_{2} \cdot y_{T+1}+\mathbf{b}_{2}\right) \end{aligned}$   ... (1)</center></p>
 </li>
-<li><p>EERNNA</p>
+<li><p>EERNNA<br>如果序列很长的话，LSTM捕捉信息的能力会降低，因此为了改善上述问题，引入常用的Attention机制。<br>经过attention后的表征当前状态的隐变量变为：<center>$h_{a t t}=\sum_{j=1}^{T} \alpha_{j} h_{j} \\ \alpha_{j}=\cos \left(x_{T+1}, x_{j}\right)$</center><br>将(1)式中的$h_{a t t}$替换$h_{T}$即可得到预测结果。</p>
 </li>
 </ul>
+<h4 id="EKT-Exercise-aware-Knowledge-Tracing"><a href="#EKT-Exercise-aware-Knowledge-Tracing" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing"></a>EKT: Exercise-aware Knowledge Tracing</h4><p>EKT本质做的是将原始EERNN学习到的学生状态从$h_{t} \in \mathbb{R}^{d_{h}}$变换成$\dot{H}_{t} \in \mathbb{R}^{\dot{d}_{h} \times K}$，也就是说用一个向量来表征学生对某个知识的掌握情况。模型结构如下图所示：<br><img src="/source/images/EKT.jpg" alt="EKT"><br>与EERNN相比，除了使用到Exercise Embedding还用到了Knowledge Embedding（对应图中绿色的部分）。</p>
+<h5 id="Knowledge-Embedding："><a href="#Knowledge-Embedding：" class="headerlink" title="Knowledge Embedding："></a>Knowledge Embedding：</h5><p>由于知识之间是相关的而非独立的，因此作者引入了memory module来计算当前的知识点与其他知识点的相关性，并最终影响到学生知识状态的隐变量，其中知识间的相关性是通过$\beta_{t}^{i}$实现的。如图中标注，k（K维，K表示所有知识点）表示当前时刻题目对应的知识点的one-hot编码，v（$d_{k}$维）则是将k进行地位压缩后的编码向量$v_{t}=\mathbf{W}_{\mathbf{k}}^{\mathrm{T}} k_{t}$，通过memory module（本质上是一个$d_{k} \times  K$的矩阵），最终$\beta_{t}^{i}$计算公式如下：<center>$\beta_{t}^{i}=\operatorname{Softmax}\left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)=\frac{\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)}{\sum_{i=1}^{K}\left(\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)\right)}$</center><br>最终隐状态表示为：<br>$H_{t}^{i}=L S T M\left(\widetilde{x}_{t}^{i}, H_{t-1}^{i} ; \theta_{H^{i}}\right)$，<br>其中$\widetilde{x}_{t}^{i}=\beta_{t}^{i} \hat{x}_{t}$。</p>
 <h2 id="A-Self-Attentive-model-for-Knowledge-Tracing"><a href="#A-Self-Attentive-model-for-Knowledge-Tracing" class="headerlink" title="A Self-Attentive model for Knowledge Tracing"></a>A Self-Attentive model for Knowledge Tracing</h2><p>该模型是<a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">Shalini Pandey</a>等人在2019年7月post出来的论文，核心就是将Transformer引入只是追踪领域代替LSTM/RNN。该论文将Transformer引入后的model称为SAKT，模型架构如下：</p>
 <p> <img src="/source/images/SAKT.jpg" alt="SAKT"></p>
 <p>模型的核心架构跟Transformer一致（对于Transformer的结构和理解，这里不多讲，请自行学习），都主要包括multi-head attention (对应文章的self-attention layer)，feed forward layer, residual connections, layer normalization 和prediction layer。重点的区别在于attention layer的输入embedding上。Transormer的输入是input经过embedding再加上Position Encoding，而本文章的输入有两部分， 一部分是用户reation的，即用户做了哪些题目以及做对做错$\mathbf{x}_{t}=\left(e_{t}, r_{t}\right)$,其中$e_{t}$表示t时刻学生做的题目，$r_{t}$表示学生t时刻的做题正误； 另一部分仅仅是题目即$e_{t}$，作者用$x_{i}$的embedding作为key和value，而$e_{t}$作为query，具体如下图所示：</p>
@@ -551,9 +565,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
       
         <div class="post-tags">
           
-            <a href="/tags/DKT/" rel="tag"># DKT</a>
-          
-            <a href="/tags/TCN/" rel="tag"># TCN</a>
+            <a href="/tags/Knowledge-Tracing/" rel="tag"># Knowledge Tracing</a>
           
         </div>
       
@@ -657,7 +669,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -668,7 +680,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -679,7 +691,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -719,7 +731,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深度知识追踪（Deep-Knowledge-Tracing）"><span class="nav-number">1.</span> <span class="nav-text">深度知识追踪（Deep Knowledge Tracing）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-Knowledge-Tracing"><span class="nav-number">1.1.</span> <span class="nav-text">Deep Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型："><span class="nav-number">1.1.1.</span> <span class="nav-text">模型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型优缺点："><span class="nav-number">1.1.2.</span> <span class="nav-text">模型优缺点：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点："><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">优点：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点："><span class="nav-number">1.1.2.0.2.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Going-Deeper-with-Deep-Knowledge-Tracing"><span class="nav-number">1.2.</span> <span class="nav-text">Going Deeper with Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization"><span class="nav-number">1.3.</span> <span class="nav-text">Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills"><span class="nav-number">1.4.</span> <span class="nav-text">Does Deep Knowledge Tracing Model Interactions Among Skills?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction"><span class="nav-number">1.5.</span> <span class="nav-text">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisite-Driven-Deep-Knowledge-Tracing"><span class="nav-number">1.6.</span> <span class="nav-text">Prerequisite-Driven Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><span class="nav-number">1.7.</span> <span class="nav-text">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型：-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">模型：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EERNN"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">EERNN</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Exercise-embedding"><span class="nav-number">1.7.1.1.1.</span> <span class="nav-text">Exercise embedding:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Student-Embedding："><span class="nav-number">1.7.1.1.2.</span> <span class="nav-text">Student Embedding：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Prediction"><span class="nav-number">1.7.1.1.3.</span> <span class="nav-text">Prediction</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Self-Attentive-model-for-Knowledge-Tracing"><span class="nav-number">1.8.</span> <span class="nav-text">A Self-Attentive model for Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结果："><span class="nav-number">1.8.1.</span> <span class="nav-text">结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感想："><span class="nav-number">1.8.2.</span> <span class="nav-text">感想：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.9.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深度知识追踪（Deep-Knowledge-Tracing）"><span class="nav-number">1.</span> <span class="nav-text">深度知识追踪（Deep Knowledge Tracing）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-Knowledge-Tracing"><span class="nav-number">1.1.</span> <span class="nav-text">Deep Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型："><span class="nav-number">1.1.1.</span> <span class="nav-text">模型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型优缺点："><span class="nav-number">1.1.2.</span> <span class="nav-text">模型优缺点：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点："><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">优点：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点："><span class="nav-number">1.1.2.0.2.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Going-Deeper-with-Deep-Knowledge-Tracing"><span class="nav-number">1.2.</span> <span class="nav-text">Going Deeper with Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization"><span class="nav-number">1.3.</span> <span class="nav-text">Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills"><span class="nav-number">1.4.</span> <span class="nav-text">Does Deep Knowledge Tracing Model Interactions Among Skills?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction"><span class="nav-number">1.5.</span> <span class="nav-text">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisite-Driven-Deep-Knowledge-Tracing"><span class="nav-number">1.6.</span> <span class="nav-text">Prerequisite-Driven Deep Knowledge Tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><span class="nav-number">1.7.</span> <span class="nav-text">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型：-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">模型：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EERNN"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">EERNN</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Exercise-embedding"><span class="nav-number">1.7.1.1.1.</span> <span class="nav-text">Exercise embedding:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Student-Embedding："><span class="nav-number">1.7.1.1.2.</span> <span class="nav-text">Student Embedding：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Prediction"><span class="nav-number">1.7.1.1.3.</span> <span class="nav-text">Prediction</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EKT-Exercise-aware-Knowledge-Tracing"><span class="nav-number">1.7.1.2.</span> <span class="nav-text">EKT: Exercise-aware Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Knowledge-Embedding："><span class="nav-number">1.7.1.2.1.</span> <span class="nav-text">Knowledge Embedding：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Self-Attentive-model-for-Knowledge-Tracing"><span class="nav-number">1.8.</span> <span class="nav-text">A Self-Attentive model for Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结果："><span class="nav-number">1.8.1.</span> <span class="nav-text">结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感想："><span class="nav-number">1.8.2.</span> <span class="nav-text">感想：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.9.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
             
 
           </div>
@@ -760,7 +772,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">5.2k</span>
+    <span title="Site words total count">5.7k</span>
   
 </div>
 
