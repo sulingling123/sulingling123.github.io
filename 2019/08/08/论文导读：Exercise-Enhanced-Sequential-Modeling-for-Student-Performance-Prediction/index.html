@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Knowledge Tracing,">
 
 
 
@@ -81,18 +81,23 @@
 
 
 
-<meta name="description" content="Every failure is leading towards success.">
-<meta name="keywords" content="深度学习 机器学习 数据挖掘 推荐 DKT ITS">
+<meta name="description" content="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction这篇[文章][10]很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Ex">
+<meta name="keywords" content="Knowledge Tracing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文导读：Exercise-Enhanced Sequential Modeling for Student Performance Prediction">
 <meta property="og:url" content="http://yoursite.com/2019/08/08/论文导读：Exercise-Enhanced-Sequential-Modeling-for-Student-Performance-Prediction/index.html">
 <meta property="og:site_name" content="数据挖掘日常笔记">
-<meta property="og:description" content="Every failure is leading towards success.">
+<meta property="og:description" content="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction这篇[文章][10]很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Ex">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-08T07:32:18.455Z">
+<meta property="og:image" content="http://yoursite.com/source/images/EERNN.jpg">
+<meta property="og:image" content="http://yoursite.com/source/images/EERNN-1.jpg">
+<meta property="og:image" content="http://yoursite.com/source/images/EKT.jpg">
+<meta property="og:image" content="http://yoursite.com/source/images/EKT-2.jpg">
+<meta property="og:updated_time" content="2019-08-08T09:33:42.761Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文导读：Exercise-Enhanced Sequential Modeling for Student Performance Prediction">
-<meta name="twitter:description" content="Every failure is leading towards success.">
+<meta name="twitter:description" content="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction这篇[文章][10]很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Ex">
+<meta name="twitter:image" content="http://yoursite.com/source/images/EERNN.jpg">
 
 
 
@@ -312,12 +317,56 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T15:32:18+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T17:33:42+08:00">
                 2019-08-08
               </time>
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/LSTM/" itemprop="url" rel="index">
+                    <span itemprop="name">LSTM</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/LSTM/Embedding/" itemprop="url" rel="index">
+                    <span itemprop="name">Embedding</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -340,7 +389,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  0
+                  1.3k
                 </span>
               
 
@@ -356,7 +405,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  5
                 </span>
               
             </div>
@@ -377,7 +426,34 @@
       
 
       
-        
+        <h2 id="EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><a href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction"></a>EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</h2><p>这篇[文章][10]很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Exercise-Enhanced Recurrent Neural Network(EERNN)，在这个模型中，不仅使用了学生的做题记录，还引入了习题的文本信息。在EERNN中，作者使用RNN的隐变量来表征学生的学习轨迹，使用BiLSTM来学习习题的编码信息。在最终predict阶段，作者在EERNN基础上采用了两种策略，一种是EERNNM with Markov property,另一种是EERNNA with attention mechanism。最终为了追踪学生在各知识点上的掌握情况，作者将EERNN引入知识概念的信息引入得到Exercise-Aware Knowledge Tracing（EKT）。</p>
+<h3 id="模型："><a href="#模型：" class="headerlink" title="模型："></a>模型：</h3><p>模型主要分两部分来描述，一是做预测的EERNN（EERNNM &amp; EERNNA），另一部分是追踪学生知识掌握情况的EKT。</p>
+<h4 id="EERNN"><a href="#EERNN" class="headerlink" title="EERNN"></a>EERNN</h4><p>EERNN的提出主要用于做学生performance的预测，基于不同的策略又分为EERNNM和EERNNA。网络结果如下图所示：</p>
+<p><img src="/source/images/EERNN.jpg" alt="EERNN"></p>
+<p>从上图可以看出：EERNNM和EERNNA的区别主要在prediction阶段，图中橘色框表示的是题目的embeddig，蓝色框表示的是学生的embedding。</p>
+<h5 id="Exercise-embedding"><a href="#Exercise-embedding" class="headerlink" title="Exercise embedding:"></a>Exercise embedding:</h5><p>Exercise embedding的获取是通过双向LSTM得到的，结构如下：<br><img src="/source/images/EERNN-1.jpg" alt="EERNN"></p>
+<p>通过上述可以得到每个word的embedding $v_{m}=$ concatenate $\left(\vec{v}_{m}, \overleftarrow v_{m}\right)$，最终Exercise的embedding是通过max-pooling每个word的embedding得到，即$x_{i}=\max \left(v_{1}, v_{2}, \ldots, v_{M}\right) x_{i} \in \mathbb{R}^{2 d_{v}}$。</p>
+<h5 id="Student-Embedding："><a href="#Student-Embedding：" class="headerlink" title="Student Embedding："></a>Student Embedding：</h5><p>表征学生的向量应该跟题目和学生的回答有关，因此作者在上面获得$x_{i}$的基础上加入了表示学生作答情况的信息，通过RNN/LSTM得到student embedding，具体实现是首先将$r_{t}$表示成一个$2 d_{v}$维的$\mathbf{0}=(0,0, \ldots, 0)$，最终输入$\widetilde{x}_{t} \in \mathbb{R}^{4 d_{v}}$表示为：<center>$\widetilde{x}_{t}=\left\{\begin{array}{ll}{\left[x_{t} \oplus \mathbf{0}\right]} & {\text { if } r_{t}=1} \\ {\left[\mathbf{0} \oplus x_{t}\right]} & {\text { if } \quad r_{t}=0}\end{array}\right.$</center></p>
+<h5 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h5><ul>
+<li><p>EERNNM:</p>
+<p>基于markov性，下一时刻状态的条件概率分布只与当前状态有关，因此对$\widetilde{r}_{T+1}$的预测只与$h_{T}$和$x_{T+1}$有关，因此计算公式如下：<center>$\begin{aligned} y_{T+1} &=\operatorname{Re} L U\left(\mathbf{W}_{1} \cdot\left[h_{T} \oplus x_{T+1}\right]+\mathbf{b}_{1}\right) \\ \widetilde{r}_{T+1} &=\sigma\left(\mathbf{W}_{2} \cdot y_{T+1}+\mathbf{b}_{2}\right) \end{aligned}$   ... (1)</center></p>
+</li>
+<li><p>EERNNA<br>如果序列很长的话，LSTM捕捉信息的能力会降低，因此为了改善上述问题，引入常用的Attention机制。<br>经过attention后的表征当前状态的隐变量变为：<center>$h_{a t t}=\sum_{j=1}^{T} \alpha_{j} h_{j} \\ \alpha_{j}=\cos \left(x_{T+1}, x_{j}\right)$</center><br>将(1)式中的$h_{a t t}$替换$h_{T}$即可得到预测结果。</p>
+</li>
+</ul>
+<h4 id="EKT-Exercise-aware-Knowledge-Tracing"><a href="#EKT-Exercise-aware-Knowledge-Tracing" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing"></a>EKT: Exercise-aware Knowledge Tracing</h4><p>EKT本质做的是将原始EERNN学习到的学生状态从$h_{t} \in \mathbb{R}^{d_{h}}$变换成$\dot{H}_{t} \in \mathbb{R}^{\dot{d}_{h} \times K}$，也就是说用一个向量来表征学生对某个知识的掌握情况。模型结构如下图所示：<br><img src="/source/images/EKT.jpg" alt="EKT"><br>与EERNN相比，除了使用到Exercise Embedding还用到了Knowledge Embedding（对应图中绿色的部分）。</p>
+<h5 id="Knowledge-Embedding："><a href="#Knowledge-Embedding：" class="headerlink" title="Knowledge Embedding："></a>Knowledge Embedding：</h5><p>由于知识之间是相关的而非独立的，因此作者引入了memory module来计算当前的知识点与其他知识点的相关性，并最终影响到学生知识状态的隐变量，其中知识间的相关性是通过$\beta_{t}^{i}$实现的。如图中标注，k（K维，K表示所有知识点）表示当前时刻题目对应的知识点的one-hot编码，v（$d_{k}$维）则是将k进行地位压缩后的编码向量$v_{t}=\mathbf{W}_{\mathbf{k}}^{\mathrm{T}} k_{t}$，通过memory module（本质上是一个$d_{k} \times  K$的矩阵），最终$\beta_{t}^{i}$计算公式如下：<center>$\beta_{t}^{i}=\operatorname{Softmax}\left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)=\frac{\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)}{\sum_{i=1}^{K}\left(\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)\right)}$</center><br>最终隐状态表示为：<br>$H_{t}^{i}=L S T M\left(\widetilde{x}_{t}^{i}, H_{t-1}^{i} ; \theta_{H^{i}}\right)$，<br>其中$\widetilde{x}_{t}^{i}=\beta_{t}^{i} \hat{x}_{t}$。</p>
+<h3 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h3><p><img src="/source/images/EKT-2.jpg" alt="EKT"></p>
+<h3 id="思考："><a href="#思考：" class="headerlink" title="思考："></a>思考：</h3><ul>
+<li>EERNN模型为什么只引入题目信息和学生做题记录，为什么不引入知识结构信息？</li>
+<li>EKT和EERNN本质是可以做相同的事情，并且结果表明EKT也由于EERNN相关模型。</li>
+<li>对应Exercise Embedding为什么采用预训练而不端到端统一到一个model中？</li>
+</ul>
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h2><ol>
+<li><a href="https://arxiv.org/pdf/1906.05658.pdf" target="_blank" rel="noopener">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</a></li>
+</ol>
+
       
     </div>
     
@@ -409,6 +485,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Knowledge-Tracing/" rel="tag"># Knowledge Tracing</a>
+          
+        </div>
       
 
       
@@ -479,8 +561,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -508,7 +599,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -550,6 +641,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><span class="nav-number">1.</span> <span class="nav-text">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型："><span class="nav-number">1.1.</span> <span class="nav-text">模型：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EERNN"><span class="nav-number">1.1.1.</span> <span class="nav-text">EERNN</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Exercise-embedding"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Exercise embedding:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Student-Embedding："><span class="nav-number">1.1.1.2.</span> <span class="nav-text">Student Embedding：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Prediction"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">Prediction</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EKT-Exercise-aware-Knowledge-Tracing"><span class="nav-number">1.1.2.</span> <span class="nav-text">EKT: Exercise-aware Knowledge Tracing</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Knowledge-Embedding："><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Knowledge Embedding：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果："><span class="nav-number">1.2.</span> <span class="nav-text">结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考："><span class="nav-number">1.3.</span> <span class="nav-text">思考：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
         <div class="back-to-top">
@@ -584,7 +691,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">5.7k</span>
+    <span title="Site words total count">6.9k</span>
   
 </div>
 
@@ -761,6 +868,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
