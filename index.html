@@ -267,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/13/doc2vec/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/15/TF的三种模型的保存与加载方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zoe">
@@ -286,7 +286,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/13/doc2vec/" itemprop="url">doc2vec</a></h1>
+                <a class="post-title-link" href="/2019/08/15/TF的三种模型的保存与加载方式/" itemprop="url">TF的三种模型的保存与加载方式</a></h1>
         
 
         <div class="post-meta">
@@ -298,8 +298,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-13T18:55:31+08:00">
-                2019-08-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-15T16:14:26+08:00">
+                2019-08-15
               </time>
             
 
@@ -314,8 +314,263 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-13T18:55:31+08:00">
-                2019-08-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-15T20:53:02+08:00">
+                2019-08-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/Tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">Tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="TF的三种模型的保存与加载方法"><a href="#TF的三种模型的保存与加载方法" class="headerlink" title="TF的三种模型的保存与加载方法"></a>TF的三种模型的保存与加载方法</h1><p>当我们训练完一波模型，准备把模型应用于生产环境时，我们需要在生产环境部署预测的model，此时就涉及到如何把我们训练好的model重新加载以及处于效率的考虑，用什么方法更好的部署模型。因此我们来谈谈常见的三种模型的保存与加载方法。</p>
+<ul>
+<li>Checkpoint： 知道模型结构，单纯保存变量  </li>
+<li>SavedModel： 不知道模型结构，保存模型和变量</li>
+<li>Freeze pb： 不需要再改变量，只要常量化的模型（“冻结”）</li>
+</ul>
+<h2 id="checkpoint"><a href="#checkpoint" class="headerlink" title="checkpoint"></a>checkpoint</h2><p>第一种必然是大家最为熟悉的checkpoint的方式，通常在模型训练时，我们通过saver=tf.train.saver()定义saver，在session中通过saver.save()保存模型中的变量。此时我们<strong>只是单纯保存了变量而没有对模型本身做任何保存</strong>，此时恢复模型需要有模型对应的源代码，因此当我们需要在C++中恢复模型，只能用C++把模型的代码复写一遍。<br>保存:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>,<span class="number">2</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>,<span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(name=<span class="string">'w'</span>, shape=[<span class="number">2</span>, <span class="number">2</span>], initializer=tf.ones_initializer())</span><br><span class="line">c = tf.add(tf.add(a, b), w)</span><br><span class="line"></span><br><span class="line">saver = tf.train.Saver()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    result = sess.run(c, feed_dict=&#123;a:[[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">2</span>,<span class="number">3</span>]], b:[[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>]]&#125;)</span><br><span class="line">    saver.save(sess, <span class="string">'./saved_model/model.ckpt'</span>)</span><br><span class="line"></span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[4. 6.]</span><br><span class="line"> [7. 9.]]</span><br></pre></td></tr></table></figure>
+<p>加载：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(name=<span class="string">'w'</span>, shape=[<span class="number">2</span>, <span class="number">2</span>], initializer=tf.ones_initializer())</span><br><span class="line">c = tf.add(tf.add(a, b), w)</span><br><span class="line"></span><br><span class="line">saver = tf.train.Saver()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    saver.restore(sess, <span class="string">'./saved_model/model.ckpt'</span>)</span><br><span class="line">    result = sess.run(c, feed_dict=&#123;a: [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">3</span>]], b: [[<span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]]&#125;)</span><br><span class="line"></span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[4. 6.]</span><br><span class="line"> [7. 9.]]</span><br></pre></td></tr></table></figure>
+<p>可以看到，通过restore我们可以得到同样的结果。</p>
+<h2 id="SavedModel"><a href="#SavedModel" class="headerlink" title="SavedModel"></a>SavedModel</h2><p>TF官网介绍说SavedModel是一种独立于语言而且可以恢复的序列化格式，使较高级别的系统和工具可以创建，使用和转换Tensorflow模型。常见的两种与SavedModel交互的方式包括tf.saved_model API 和tf.estimator.Estimator。</p>
+<h3 id="tf-saved-model-API"><a href="#tf-saved-model-API" class="headerlink" title="tf.saved_model API"></a>tf.saved_model API</h3><h4 id="保存方法1-使用tf-saved-model-simple-save"><a href="#保存方法1-使用tf-saved-model-simple-save" class="headerlink" title="保存方法1:使用tf.saved_model.simple_save"></a>保存方法1:使用tf.saved_model.simple_save</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(name=<span class="string">'w'</span>, shape=[<span class="number">2</span>, <span class="number">2</span>], initializer=tf.ones_initializer())</span><br><span class="line">c = tf.add(tf.add(a, b), w)</span><br><span class="line"></span><br><span class="line">saver = tf.train.Saver()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">    tf.saved_model.simple_save(session=sess,</span><br><span class="line">                               export_dir=<span class="string">'./saved_model/pb/1'</span>,</span><br><span class="line">                               inputs=&#123;<span class="string">'a'</span>: a, <span class="string">'b'</span>: b&#125;,</span><br><span class="line">                               outputs=&#123;<span class="string">'c'</span>: c&#125;)</span><br></pre></td></tr></table></figure>
+<p>此时，我们可以在saved_model/pb下看到如下文件结构：</p>
+<pre><code> --  saved_model
+    |--  pb
+        |-- 1
+            |-- saved_model.pb
+            |-- variables
+                |-- variables.data-00000-of-00001
+                |-- variables.index
+</code></pre><h4 id="保存方法2-通过SavedModelBuilder构建"><a href="#保存方法2-通过SavedModelBuilder构建" class="headerlink" title="保存方法2:通过SavedModelBuilder构建"></a>保存方法2:通过SavedModelBuilder构建</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line"></span><br><span class="line">w = tf.get_variable(name=<span class="string">'w'</span>, shape=[<span class="number">2</span>, <span class="number">2</span>], initializer=tf.ones_initializer())</span><br><span class="line">c = tf.add(tf.add(a, b), w)</span><br><span class="line">saver =tf.train.Saver()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># sess.run(tf.global_variables_initializer())</span></span><br><span class="line">    saver.restore(sess, <span class="string">'./saved_model/model.ckpt'</span>)</span><br><span class="line">    builder = tf.saved_model.builder.SavedModelBuilder(<span class="string">"./saved_model/pb/2"</span>)</span><br><span class="line">    inputs = &#123;<span class="string">'a'</span>: tf.saved_model.utils.build_tensor_info(a),</span><br><span class="line">              <span class="string">'b'</span>: tf.saved_model.utils.build_tensor_info(b)&#125;</span><br><span class="line">    output = &#123;<span class="string">'c'</span>: tf.saved_model.utils.build_tensor_info(c)&#125;</span><br><span class="line"></span><br><span class="line">    prediction_signature = tf.saved_model.signature_def_utils.build_signature_def(</span><br><span class="line">        inputs=inputs,</span><br><span class="line">        outputs=output,</span><br><span class="line">        method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME</span><br><span class="line">    )</span><br><span class="line">    builder.add_meta_graph_and_variables(</span><br><span class="line">        sess,</span><br><span class="line">        [tf.saved_model.tag_constants.SERVING],</span><br><span class="line">        &#123;tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: prediction_signature&#125;</span><br><span class="line">    )</span><br><span class="line">    builder.save()</span><br></pre></td></tr></table></figure>
+<h4 id="通过saved-model-cli命令查看SavedModel"><a href="#通过saved-model-cli命令查看SavedModel" class="headerlink" title="通过saved_model_cli命令查看SavedModel"></a>通过saved_model_cli命令查看SavedModel</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">saved_model_cli show --dir /Users/xxx/Documents/pycharm_workspace/test_python/saved_model/pb/1 --all</span><br></pre></td></tr></table></figure>
+<p>可以得到如下结果：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">MetaGraphDef with tag-set: <span class="string">'serve'</span> contains the following SignatureDefs:</span><br><span class="line"></span><br><span class="line">signature_def[<span class="string">'serving_default'</span>]:</span><br><span class="line">  The given SavedModel SignatureDef contains the following input(s):</span><br><span class="line">    inputs[<span class="string">'a'</span>] tensor_info:</span><br><span class="line">        dtype: DT_FLOAT</span><br><span class="line">        shape: (2, 2)</span><br><span class="line">        name: a:0</span><br><span class="line">    inputs[<span class="string">'b'</span>] tensor_info:</span><br><span class="line">        dtype: DT_FLOAT</span><br><span class="line">        shape: (2, 2)</span><br><span class="line">        name: b:0</span><br><span class="line">  The given SavedModel SignatureDef contains the following output(s):</span><br><span class="line">    outputs[<span class="string">'c'</span>] tensor_info:</span><br><span class="line">        dtype: DT_FLOAT</span><br><span class="line">        shape: (2, 2)</span><br><span class="line">        name: Add_1:0</span><br><span class="line">  Method name is: tensorflow/serving/predict</span><br></pre></td></tr></table></figure></p>
+<h4 id="加载方法1-通过tf-saved-model-loader-load加载"><a href="#加载方法1-通过tf-saved-model-loader-load加载" class="headerlink" title="加载方法1: 通过tf.saved_model.loader.load加载"></a>加载方法1: 通过tf.saved_model.loader.load加载</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">export_dir = <span class="string">'./saved_model/pb/2'</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    meta_graph_def = tf.saved_model.loader.load(sess, [<span class="string">'serve'</span>],</span><br><span class="line">                                                export_dir)</span><br><span class="line">    a = sess.graph.get_tensor_by_name(<span class="string">'a:0'</span>)</span><br><span class="line">    b = sess.graph.get_tensor_by_name(<span class="string">'b:0'</span>)</span><br><span class="line"></span><br><span class="line">    c = sess.graph.get_tensor_by_name(<span class="string">'Add_1:0'</span>)</span><br><span class="line">    print(sess.run(c, feed_dict=&#123;a: [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">3</span>]], b: [[<span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]]&#125;))</span><br></pre></td></tr></table></figure>
+<h4 id="加载方法2-通过tf-contrib-predictor-from-saved-model"><a href="#加载方法2-通过tf-contrib-predictor-from-saved-model" class="headerlink" title="加载方法2: 通过tf.contrib.predictor.from_saved_model"></a>加载方法2: 通过tf.contrib.predictor.from_saved_model</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">export_dir = <span class="string">'./saved_model/pb/2'</span></span><br><span class="line">predictor_fn = tf.contrib.predictor.from_saved_model(</span><br><span class="line">    export_dir=export_dir,</span><br><span class="line">    signature_def_key=<span class="string">"serving_default"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">output = predictor_fn(&#123;<span class="string">'a'</span>: [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">3</span>]],</span><br><span class="line">                       <span class="string">'b'</span>: [[<span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]]</span><br><span class="line">                       &#125;)</span><br><span class="line">print(output)</span><br></pre></td></tr></table></figure>
+<h3 id="结合tf-estimator-Estimator使用"><a href="#结合tf-estimator-Estimator使用" class="headerlink" title="结合tf.estimator.Estimator使用"></a>结合tf.estimator.Estimator使用</h3><h4 id="保存方法"><a href="#保存方法" class="headerlink" title="保存方法"></a>保存方法</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">serving_input_receiver_fn</span><span class="params">()</span>:</span></span><br><span class="line">    feature_spec = &#123;<span class="string">'a'</span>: tf.FixedLenFeature([<span class="number">2</span>,<span class="number">2</span>], tf.float32),</span><br><span class="line">                    <span class="string">'b'</span>: tf.FixedLenFeature([<span class="number">2</span>,<span class="number">2</span>], tf.float32)&#125;</span><br><span class="line"></span><br><span class="line">    serialized_tf_example = tf.placeholder(dtype=tf.string,</span><br><span class="line">                                           shape=[<span class="number">1</span>],</span><br><span class="line">                                           name=<span class="string">'input_example_tensor'</span>)</span><br><span class="line">    receiver_tensors = &#123;<span class="string">'examples'</span>: serialized_tf_example&#125;</span><br><span class="line">    features = tf.parse_example(serialized_tf_example, feature_spec)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tf.estimator.export.ServingInputReceiver(features, receiver_tensors)</span><br><span class="line"></span><br><span class="line">estimator.export_savedmodel(<span class="string">'saved_model'</span>, serving_input_receiver_fn)</span><br></pre></td></tr></table></figure>
+<h4 id="通过tf-serving部署服务访问"><a href="#通过tf-serving部署服务访问" class="headerlink" title="通过tf-serving部署服务访问"></a>通过tf-serving部署服务访问</h4><ul>
+<li><p>部署server端：</p>
+<ul>
+<li>基于Dockerfile 创建镜像：<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">18.04</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Install general packages</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update &amp;&amp; apt-get install -y \</span></span><br><span class="line"><span class="bash">        curl \</span></span><br><span class="line"><span class="bash">        libcurl3-dev \</span></span><br><span class="line"><span class="bash">        unzip \</span></span><br><span class="line"><span class="bash">        wget \</span></span><br><span class="line"><span class="bash">        &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apt-get clean &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /var/lib/apt/lists/*</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Previous Installation of tensorflow-model-server (BROKEN RECENTLY)</span></span><br><span class="line"><span class="comment">#RUN echo "deb [arch=amd64] http://storage.googleapis.com/tensorflow-serving-apt stable tensorflow-model-server tensorflow-model-server-universal" | tee /etc/apt/sources.list.d/tensorflow-serving.list \</span></span><br><span class="line"><span class="comment">#    &amp;&amp; curl https://storage.googleapis.com/tensorflow-serving-apt/tensorflow-serving.release.pub.gpg | apt-key add - \</span></span><br><span class="line"><span class="comment">#    &amp;&amp; apt-get update &amp;&amp; apt-get install tensorflow-model-server</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># New installation of tensorflow-model-server</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> TEMP_DEB=<span class="string">"<span class="variable">$(mktemp)</span>"</span> \</span></span><br><span class="line"><span class="bash">    &amp;&amp; wget -O <span class="string">"<span class="variable">$TEMP_DEB</span>"</span> <span class="string">'http://storage.googleapis.com/tensorflow-serving-apt/pool/tensorflow-model-server-1.12.0/t/tensorflow-model-server/tensorflow-model-server_1.12.0_all.deb'</span> \</span></span><br><span class="line"><span class="bash">    &amp;&amp; dpkg -i <span class="string">"<span class="variable">$TEMP_DEB</span>"</span> \</span></span><br><span class="line"><span class="bash">    &amp;&amp; rm -f <span class="string">"<span class="variable">$TEMP_DEB</span>"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gRPC port</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8500</span></span><br><span class="line"><span class="comment"># REST API port</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8501</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Serve the model when the container starts</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> tensorflow_model_server \</span></span><br><span class="line"><span class="bash">--port=8500 \</span></span><br><span class="line"><span class="bash">--rest_api_port=8501 \</span></span><br><span class="line"><span class="bash">--model_name=<span class="string">"<span class="variable">$MODEL_NAME</span>"</span> \</span></span><br><span class="line"><span class="bash">--model_base_path=<span class="string">"<span class="variable">$MODEL_PATH</span>"</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>运行如下命令创建镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build --rm -f Dockerfile -t tensorflow-serving-example:0.1 .</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>创建临时目录保存savedModel</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p ./saved_model/dkt/1</span><br><span class="line">cp -R ./saved_model/pb/* ./saved_model/<span class="built_in">test</span>/1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -it -v /home/xxx/tf_serving/saved_model/:/models -e MODEL_NAME=<span class="built_in">test</span> -e MODEL_PATH=/models/<span class="built_in">test</span> -p 8500:8500 -p 8501:8501 --name tensorflow-serving-example tensorflow-serving-example:0.1</span><br></pre></td></tr></table></figure>
+<p>至此，server已启动，运行client进行测试  </p>
+</li>
+</ul>
+</li>
+<li><p>client</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> grpc</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.contrib.util <span class="keyword">import</span> make_tensor_proto</span><br><span class="line"><span class="keyword">from</span> tensorflow_serving.apis <span class="keyword">import</span> predict_pb2</span><br><span class="line"><span class="keyword">from</span> tensorflow_serving.apis <span class="keyword">import</span> prediction_service_pb2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(host, port, model, signature_name)</span>:</span></span><br><span class="line">    channel = grpc.insecure_channel(<span class="string">'&#123;host&#125;:&#123;port&#125;'</span>.format(host=host, port=port))</span><br><span class="line">    stub = prediction_service_pb2.PredictionServiceStub(channel)</span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="comment"># Call classification model to make prediction</span></span><br><span class="line">    request = predict_pb2.PredictRequest()</span><br><span class="line">    request.model_spec.name = model</span><br><span class="line">    request.model_spec.signature_name = signature_name</span><br><span class="line"></span><br><span class="line">    feature = &#123;&#125;</span><br><span class="line">    feature[<span class="string">'a'</span>] = tf.train.Feature(float_list=tf.train.FloatList(value=[[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>]]))</span><br><span class="line">    feature[<span class="string">'b'</span>] = tf.train.Feature(float_list=tf.train.FloatList(value=[[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>]]]))</span><br><span class="line">    example = tf.train.Example(</span><br><span class="line">        features=tf.train.Features(</span><br><span class="line">            feature=feature</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    request.inputs[<span class="string">'examples'</span>].CopyFrom(make_tensor_proto([example.SerializeToString()], shape=[<span class="number">1</span>]))</span><br><span class="line">    result = stub.Predict(request, <span class="number">10.0</span>)  <span class="comment"># 10 secs timeout</span></span><br><span class="line"></span><br><span class="line">    end = time.time()</span><br><span class="line">    time_diff = end - start</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Reference:</span></span><br><span class="line">    <span class="comment"># How to access nested values</span></span><br><span class="line">    <span class="comment"># https://stackoverflow.com/questions/44785847/how-to-retrieve-float-val-from-a-predictresponse-object</span></span><br><span class="line">    <span class="comment"># print(result)</span></span><br><span class="line">    result = result.outputs[<span class="string">'predict'</span>].float_val</span><br><span class="line">    print(result)</span><br><span class="line">    print(<span class="string">'predict shape &#123;&#125;'</span>.format(len(result)))</span><br><span class="line">    print(<span class="string">'time elapased: &#123;&#125;'</span>.format(time_diff))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(<span class="string">'--host'</span>, help=<span class="string">'Tensorflow server host name'</span>, default=<span class="string">'10.8.8.71'</span>, type=str)</span><br><span class="line">    parser.add_argument(<span class="string">'--port'</span>, help=<span class="string">'Tensorflow server port number'</span>, default=<span class="number">8500</span>, type=int)</span><br><span class="line">    parser.add_argument(<span class="string">'--model'</span>, help=<span class="string">'model name'</span>, default=<span class="string">'dkt'</span>, type=str)</span><br><span class="line">    parser.add_argument(<span class="string">'--signature_name'</span>, help=<span class="string">'Signature name of saved TF model'</span>,</span><br><span class="line">                        default=<span class="string">'serving_default'</span>, type=str)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    run(args.host, args.port, args.model, args.signature_name)</span><br></pre></td></tr></table></figure>
+<h2 id="Freeze-pb"><a href="#Freeze-pb" class="headerlink" title="Freeze pb"></a>Freeze pb</h2><p>当不再需要改变变量，只要常量化当模型时，我们可以采用freeze pb的方式。可以用在不同语言部署的场景下，好处是除了可以冻结模型外，还可以指定剔除某些多余的节点。</p>
+<h3 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">input_checkpoint = <span class="string">'./saved_model'</span></span><br><span class="line">output_graph = <span class="string">'./saved_model/pb/4/saved_model.pb'</span></span><br><span class="line"><span class="comment"># 指定输出的节点名称,该节点名称必须是原模型中存在的节点</span></span><br><span class="line">output_node_names = <span class="string">"Add_1"</span></span><br><span class="line"><span class="comment"># saver = tf.train.import_meta_graph(input_checkpoint + '.meta', clear_devices=True)</span></span><br><span class="line"></span><br><span class="line">graph = tf.Graph()  <span class="comment"># 获得默认的图</span></span><br><span class="line"><span class="keyword">with</span> graph.as_default() <span class="keyword">as</span> g:</span><br><span class="line">    a = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'a'</span>)</span><br><span class="line">    b = tf.placeholder(dtype=tf.float32, shape=[<span class="number">2</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line"></span><br><span class="line">    w = tf.get_variable(name=<span class="string">'w'</span>, shape=[<span class="number">2</span>, <span class="number">2</span>], initializer=tf.ones_initializer())</span><br><span class="line">    c = tf.add(tf.add(a, b), w)</span><br><span class="line">    <span class="comment"># Define saver &amp; Load checkpoint</span></span><br><span class="line">    saver = tf.train.Saver()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=graph) <span class="keyword">as</span> sess:</span><br><span class="line">    ckpt = tf.train.get_checkpoint_state(input_checkpoint)</span><br><span class="line">    <span class="keyword">if</span> ckpt <span class="keyword">and</span> ckpt.model_checkpoint_path:</span><br><span class="line">        print(<span class="string">'restore True...'</span>)</span><br><span class="line">        saver.restore(sess, ckpt.model_checkpoint_path)  <span class="comment"># 恢复图并得到数据</span></span><br><span class="line">    <span class="comment"># for op in graph.get_operations():</span></span><br><span class="line">    <span class="comment">#     print(op.name, op.values())</span></span><br><span class="line">    input_graph_def = graph.as_graph_def()  <span class="comment"># 返回一个序列化的图代表当前的图</span></span><br><span class="line">    output_graph_def = tf.graph_util.convert_variables_to_constants(  <span class="comment"># 模型持久化，将变量值固定</span></span><br><span class="line">        sess=sess,</span><br><span class="line">        input_graph_def=input_graph_def,  <span class="comment"># 等于:sess.graph_def</span></span><br><span class="line">        output_node_names=output_node_names.split(<span class="string">","</span>))  <span class="comment"># 如果有多个输出节点，以逗号隔开</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(output_graph, <span class="string">"wb"</span>) <span class="keyword">as</span> f:  <span class="comment"># 保存模型</span></span><br><span class="line">        f.write(output_graph_def.SerializeToString())  <span class="comment"># 序列化输出</span></span><br><span class="line">    print(<span class="string">"%d ops in the final graph."</span> % len(output_graph_def.node))  <span class="comment"># 得到当前图有几个操作节点</span></span><br></pre></td></tr></table></figure>
+<p>运行上述程序，可在./saved_model/pb/4/下看到saved_model.pb文件。</p>
+<h3 id="加载pb"><a href="#加载pb" class="headerlink" title="加载pb"></a>加载pb</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">dir = <span class="string">'./saved_model/pb/4/saved_model.pb'</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(<span class="string">"load graph"</span>)</span><br><span class="line">    <span class="keyword">with</span> tf.gfile.FastGFile(dir, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        graph_def = tf.GraphDef()</span><br><span class="line">    graph_def.ParseFromString(f.read())</span><br><span class="line">    sess.graph.as_default()</span><br><span class="line">    tf.import_graph_def(graph_def, name=<span class="string">''</span>)</span><br><span class="line">    return_elements = [<span class="string">u'a:0'</span>, <span class="string">u'b:0'</span>, <span class="string">u'Add_1:0'</span>]</span><br><span class="line">    return_elements = tf.import_graph_def(graph_def,</span><br><span class="line">                                            return_elements=return_elements)</span><br><span class="line">    a, b, c = return_elements[<span class="number">0</span>], return_elements[<span class="number">1</span>], return_elements[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    feed_dict_testing = &#123;a: [[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>]],</span><br><span class="line">                            b: [[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>]],</span><br><span class="line"></span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">    result = sess.run(c, feed_dict=feed_dict_testing)</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>以上就是常见的TF的模型保存及对应的加载方法～</p>
+<h1 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h1><ol>
+<li><a href="https://ggaaooppeenngg.github.io/zh-CN/2019/03/03/tf-%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BF%9D%E5%AD%98%E5%92%8C%E5%86%BB%E7%BB%93/" target="_blank" rel="noopener">tensorflow 模型的存档、保存、冻结、优化</a></li>
+<li><a href="https://medium.com/@yuu.ishikawa/introduction-to-restful-api-with-tensorflow-serving-9c60969b5b95" target="_blank" rel="noopener">Introduction to RESTful API with Tensorflow Serving</a></li>
+<li><a href="https://github.com/yu-iskw/tensorflow-serving-example/blob/master/python/train/mnist_premodeled_estimator.py" target="_blank" rel="noopener">tensorflow-serving-example</a></li>
+<li><a href="https://www.tensorflow.org/guide/saved_model?hl=zh-cn" target="_blank" rel="noopener">tensorflow 官方文档</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/word2vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/word2vec/" itemprop="url">word2vec</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-14T12:30:39+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-14T12:30:39+08:00">
+                2019-08-14
               </time>
             
           </span>
@@ -382,6 +637,198 @@
         
           
             
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/13/doc2vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/13/doc2vec/" itemprop="url">doc2vec</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-13T18:55:31+08:00">
+                2019-08-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-13T19:23:31+08:00">
+                2019-08-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  32
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Doc2vec"><a href="#Doc2vec" class="headerlink" title="Doc2vec"></a>Doc2vec</h1><p>常用于短文本向量化的方法包括：</p>
+<ul>
+<li>Bag of words</li>
+<li>LDA</li>
+<li>Average word vectors</li>
+<li>tfidf-weighting word vector</li>
+</ul>
+<p>但是上述方法</p>
+
           
         
       
@@ -1383,7 +1830,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1394,7 +1841,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1405,7 +1852,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1470,7 +1917,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">6.9k</span>
+    <span title="Site words total count">9k</span>
   
 </div>
 
