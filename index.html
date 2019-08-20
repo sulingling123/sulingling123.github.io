@@ -267,6 +267,210 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/20/推荐之FM-FFM-Deep-FM/" itemprop="url">推荐之FM/FFM/Deep_FM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-20T17:02:29+08:00">
+                2019-08-20
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-20T17:07:35+08:00">
+                2019-08-20
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  976
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="FM"><a href="#FM" class="headerlink" title="FM"></a>FM</h1><p>FM常用于CTR估计，能够处理稀疏数据下的特征组合的问题。</p>
+<h2 id="FM原理"><a href="#FM原理" class="headerlink" title="FM原理"></a>FM原理</h2><p>一般的线性模型不考虑特征之间的关系，公式定义如下：<br>    <center> $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}$         ...(1) </center><br>为了表达特征之间的相关性，利用多项式函数，定义如下：<br>    <center>$y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}+\sum_{i=1}^{n}\sum_{j=i+1}^{n}w_{i,j
+}x_{i}x_{j}$         ...(2)</center><br>如上述公式，定义的二阶特征参数有$\frac{n*(n-1)}{2}$个，同时当特征非常稀疏且纬度高时，不仅时间复杂度在增加，同时由于稀疏的特征，很多二阶特征系数通常学习不到。<br>为了解决上述的问题，FM对每个特征引入辅助向量$V_{i} = [v_{i1},v_{i2},…v_{ik}]^{T}$，此时每个特征学习到一个k纬向量而不是一个值，从而解决数据稀疏下到特征组合问题。此时模型如下：<center>$y = w_{0}+\sum_{i=0}^{n}w_{i}x_{i} + \sum_{i=1}^{n}\sum_{j=i+1}^{n}<v_{i},v_{j}>x_{i}x_{j}$        ...(3) </v_{i},v_{j}></center><br>其中k表示辅助向量的纬度，为超参数。上述表达式的时间复杂度为$kn^{2}$。为降低时间复杂度，对(3)式最后一项做如下变化：<br>$\sum _ { i = 1 } ^ { n } \sum _ { j = i + 1 } ^ { n } &lt; V _ { i } , V _ { j } &gt; x _ { i } x _ { j }$<br>$= \frac { 1 } { 2 } \sum _ { i = 1 } ^ { n } \sum _ { j = 1 } ^ { n } &lt; V _ { i } , V _ { j } &gt; x _ { i } x _ { j } - \frac { 1 } { 2 } \sum _ { i = 1 } ^ { n } &lt; V _ { i } , V _ { i } &gt; x _ { i } x _ { i }$<br>$=\frac{1}{2}(\sum_{i=1}^{n}\sum_{j=1}^{n}\sum_{f=1}^{k}v_{if}v_{jf}x_{i}x_{j} - \sum_{i=1}^{n}\sum_{f=1}^{k}v_{if}v_{if}x_ix_i)$<br>$=\frac{1}{2}\sum_{f=1}^{k}((\sum_{i=1}^{n}v_{if}x_{i})^2 - \sum_{i=1}^{n}(v_{if}x_i)^2)$</p>
+<p>通过上述变化可以发现，将公式(3)的时间复杂度从$kn^{2}$降低为$kn$。</p>
+<h2 id="FM优点"><a href="#FM优点" class="headerlink" title="FM优点"></a>FM优点</h2><ol>
+<li>通过引入辅助向量，能够解决稀疏数据的特征组合问题。</li>
+<li>模型的时间复杂度为线性的（kn）。</li>
+</ol>
+<h1 id="FFM"><a href="#FFM" class="headerlink" title="FFM"></a>FFM</h1><p>FFM(Field-aware Factorization Machine)为FM的改进版，区别是FM的辅助向量为K维，而FFM的辅助向量为F*K维，其中F为field个数。对应的FFM模型如下：<br>    <center>$y = w_{0}+\sum_{i=0}^{n}w_{i}x_{i} + \sum_{i=1}^{n}\sum_{j=i+1}^{n}<v_{i,f_{j}},v_{j,f_{i}}>x_{i}x_{j}$        ...(3) </v_{i,f_{j}},v_{j,f_{i}}></center><br>    其中$f_{i,f_{j}}$为i特征属于$f_{j}$下的辅助向量。由于FFM不能按照(3)进行化简，因此时间复杂度为$kn^{2}$。</p>
+<h2 id="FFM优缺点"><a href="#FFM优缺点" class="headerlink" title="FFM优缺点"></a>FFM优缺点</h2><ol>
+<li>与FM相比FFM具有field感知能力，模型能力更强。</li>
+<li>与FM相比，辅助向量变为F*K维学习参数变为FM的F倍。</li>
+<li>与FM相比，时间复杂度高。</li>
+</ol>
+<h1 id="DeepFM"><a href="#DeepFM" class="headerlink" title="DeepFM"></a>DeepFM</h1><p>由于FM/FFM使用的是一阶和二阶特征，为了学习更高阶特征，Huifeng Guo等人提出了DeepFM。<br>与DeepFM相似的模型有FNN，PNN，Wide&amp;deep，模型结构如下图所示：<br><img src="/2019/08/20/推荐之FM-FFM-Deep-FM/1.png" alt="1"><br>FNN使用预训练好的权重作为NN的输入，只能得到高阶特征组合，PNN则是在embedding层和第一层隐藏层中加入了product操作。Wide&amp;deep 的提出则是为了综合低阶特征组合和高阶特征组合，wide部分多为专家经过特征工程得到的低阶组合特征，而deep部分则通过NN网络学习到高阶特征。<br>DeepFM不仅可以达到Wide&amp;deep同时学习低阶特征组合和高阶特征组合的效果，同时想比于Wide&amp;deep网络的优点是，不需要专家经过特征组合筛选特征。网络结果如下：<br><img src="/2019/08/20/推荐之FM-FFM-Deep-FM/2.png" alt="2"></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li>DeepFM: A Factorization-Machine based Neural Network for CTR Prediction   [<a href="https://arxiv.org/pdf/1703.04247.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1703.04247.pdf</a>]</li>
+<li>推荐系统召回四模型之：全能的FM模型<br>[<a href="https://zhuanlan.zhihu.com/p/58160982" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/58160982</a>]</li>
+<li>CTR预估算法之FM, FFM, DeepFM及实践<br>[<a href="https://blog.csdn.net/John_xyz/article/details/78933253" target="_blank" rel="noopener">https://blog.csdn.net/John_xyz/article/details/78933253</a>]</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/15/TF的三种模型的保存与加载方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -569,12 +773,45 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-14T12:30:39+08:00">
-                2019-08-14
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-20T17:02:47+08:00">
+                2019-08-20
               </time>
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/NN/" itemprop="url" rel="index">
+                    <span itemprop="name">NN</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -731,8 +968,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-13T19:23:31+08:00">
-                2019-08-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-16T09:52:58+08:00">
+                2019-08-16
               </time>
             
           </span>
@@ -781,7 +1018,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  32
+                  407
                 </span>
               
 
@@ -827,7 +1064,15 @@
 <li>Average word vectors</li>
 <li>tfidf-weighting word vector</li>
 </ul>
-<p>但是上述方法</p>
+<p>上述方法存在公共的问题是没有考虑单词的顺序。而本文介绍的doc2vec是2014年谷歌的两位大牛<a href="https://cs.stanford.edu/~quocle/paragraph_vector.pdf" target="_blank" rel="noopener">Quoc Le 和 Tomas Mikolov</a>提出的。文章提出一种无监督学习模型通过预测句子/段落中word来得到句子/段落/文档的向量表示。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><h3 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h3><p>文章提出的得到句子/段落/文档向量的方法是受到word2vec的启发，因此先回顾一下word2vec。如下图所示，word2vec是通过给定单词预测另一个单词，如CBOW根据前后词预测中间词，以及Skip-gram根据中间词预测前后词。<br><img src="/2019/08/13/doc2vec/1.jpg" alt="1"><br>在模型中，每个词都用唯一的向量表示，是通过一个W矩阵通过index索引得到的每个词的向量表示，通过concat/average所有词的向量表示作为feature去预测另外一个词。在CBOW中，通过前后词预测中间词，模型最终优化的是最大化给定前后词的条件下当前词出现的概率，即：<center>$\frac{1}{T} \sum_{t=k}^{T-k} \log p\left(w_{t} | w_{t-k}, \ldots, w_{t+k}\right)$</center></p>
+<p>最终模型通过softmax得到每个词出现的概率：<center>$p\left(w_{t} | w_{t-k}, \ldots, w_{t+k}\right)=\frac{e^{y_{w_{t}}}}{\sum_{i} e^{y_{i}}}$</center></p>
+<p>原始论文中还提到使用层次softmax代替softmax来提升训练速度。详细细节见<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">原文</a>.</p>
+<hr>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h1><ol>
+<li><a href="https://cs.stanford.edu/~quocle/paragraph_vector.pdf" target="_blank" rel="noopener">Distributed Representations of Sentences and Documents</a></li>
+<li><a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf</a></li>
+</ol>
 
           
         
@@ -1830,7 +2075,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1841,7 +2086,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1852,7 +2097,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1917,7 +2162,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9k</span>
+    <span title="Site words total count">10.4k</span>
   
 </div>
 

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="pytorch,aliyun,">
+  <meta name="keywords" content="FM/FFM/Deep_FM,">
 
 
 
@@ -81,18 +81,21 @@
 
 
 
-<meta name="description" content="1.阿里云ECS 默认安装cuda 9.1版本 确定cuda版本：  首先使用nvidia -smi 查看显卡驱动运行状态 使用nvcc -V查看cuda-toolkit安装是否成功 若显示nvcc命令不存在： 使用whereis cuda 查看cuda路径 在～/.bashrc 中加入：12export PATH=/usr/local/cuda/bin:$PATH export LD_LIBRA">
-<meta name="keywords" content="pytorch,aliyun">
+<meta name="description" content="FMFM常用于CTR估计，能够处理稀疏数据下的特征组合的问题。 FM原理一般的线性模型不考虑特征之间的关系，公式定义如下：     $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}$         ...(1) 为了表达特征之间的相关性，利用多项式函数，定义如下：    $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}+\sum_{i=1}^{n}\sum_{">
+<meta name="keywords" content="FM&#x2F;FFM&#x2F;Deep_FM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建">
-<meta property="og:url" content="http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/index.html">
+<meta property="og:title" content="推荐之FM&#x2F;FFM&#x2F;Deep_FM">
+<meta property="og:url" content="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/index.html">
 <meta property="og:site_name" content="数据挖掘日常笔记">
-<meta property="og:description" content="1.阿里云ECS 默认安装cuda 9.1版本 确定cuda版本：  首先使用nvidia -smi 查看显卡驱动运行状态 使用nvcc -V查看cuda-toolkit安装是否成功 若显示nvcc命令不存在： 使用whereis cuda 查看cuda路径 在～/.bashrc 中加入：12export PATH=/usr/local/cuda/bin:$PATH export LD_LIBRA">
+<meta property="og:description" content="FMFM常用于CTR估计，能够处理稀疏数据下的特征组合的问题。 FM原理一般的线性模型不考虑特征之间的关系，公式定义如下：     $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}$         ...(1) 为了表达特征之间的相关性，利用多项式函数，定义如下：    $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}+\sum_{i=1}^{n}\sum_{">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-08T07:28:33.462Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/2.png">
+<meta property="og:updated_time" content="2019-08-20T09:07:35.412Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建">
-<meta name="twitter:description" content="1.阿里云ECS 默认安装cuda 9.1版本 确定cuda版本：  首先使用nvidia -smi 查看显卡驱动运行状态 使用nvcc -V查看cuda-toolkit安装是否成功 若显示nvcc命令不存在： 使用whereis cuda 查看cuda路径 在～/.bashrc 中加入：12export PATH=/usr/local/cuda/bin:$PATH export LD_LIBRA">
+<meta name="twitter:title" content="推荐之FM&#x2F;FFM&#x2F;Deep_FM">
+<meta name="twitter:description" content="FMFM常用于CTR估计，能够处理稀疏数据下的特征组合的问题。 FM原理一般的线性模型不考虑特征之间的关系，公式定义如下：     $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}$         ...(1) 为了表达特征之间的相关性，利用多项式函数，定义如下：    $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}+\sum_{i=1}^{n}\sum_{">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/1.png">
 
 
 
@@ -122,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/">
 
 
 
 
 
-  <title>阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建 | 数据挖掘日常笔记</title>
+  <title>推荐之FM/FFM/Deep_FM | 数据挖掘日常笔记</title>
   
 
 
@@ -267,7 +270,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zoe">
@@ -284,7 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建</h1>
+          <h1 class="post-title" itemprop="name headline">推荐之FM/FFM/Deep_FM</h1>
         
 
         <div class="post-meta">
@@ -296,8 +299,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-08T15:32:00+08:00">
-                2019-08-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-20T17:02:29+08:00">
+                2019-08-20
               </time>
             
 
@@ -312,8 +315,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-08T15:28:33+08:00">
-                2019-08-08
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-20T17:07:35+08:00">
+                2019-08-20
               </time>
             
           </span>
@@ -331,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/环境搭建/" itemprop="url" rel="index">
-                    <span itemprop="name">环境搭建</span>
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
                   </a>
                 </span>
 
@@ -362,7 +365,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  269
+                  976
                 </span>
               
 
@@ -378,7 +381,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  4
                 </span>
               
             </div>
@@ -399,32 +402,25 @@
       
 
       
-        <h3 id="1-阿里云ECS-默认安装cuda-9-1版本"><a href="#1-阿里云ECS-默认安装cuda-9-1版本" class="headerlink" title="1.阿里云ECS 默认安装cuda 9.1版本"></a>1.阿里云ECS 默认安装cuda 9.1版本</h3><ul>
-<li>确定cuda版本： <ul>
-<li>首先使用nvidia -smi 查看显卡驱动运行状态</li>
-<li>使用nvcc -V查看cuda-toolkit安装是否成功<ul>
-<li>若显示nvcc命令不存在：<ul>
-<li>使用whereis cuda 查看cuda路径</li>
-<li>在～/.bashrc 中加入：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=/usr/local/cuda/bin:$PATH </span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64/</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>source ～/.bashrc 命令使环境变量生效    </p>
-<h3 id="2-安装Anaconda："><a href="#2-安装Anaconda：" class="headerlink" title="2.  安装Anaconda："></a>2.  安装Anaconda：</h3><p> <a href="https://repo.anaconda.com/archive/" target="_blank" rel="noopener">https://repo.anaconda.com/archive/</a>   版本 Anaconda3-5.1.0-Linux-x86_64.sh</p>
-<h3 id="3-安装cudnn："><a href="#3-安装cudnn：" class="headerlink" title="3. 安装cudnn："></a>3. 安装cudnn：</h3><p>从官网下载 <a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a><br>解压tar -xzvf cudnn-9.1-linux-x64-v7.1.tgz<br>copy到对应cuda文件夹下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo cp cuda/include/cudnn.h /usr/local/cuda/include</span><br><span class="line">sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64</span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure></p>
-<p>查看cudnn版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A5</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-安装pytorch"><a href="#4-安装pytorch" class="headerlink" title="4. 安装pytorch"></a>4. 安装pytorch</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch torchvision cuda91 -c pytorch</span><br></pre></td></tr></table></figure>
-<p>⚠️： 若不成功，可以查看pytorch 版本，可以更改pytorch版本：(实测可用)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==0.4.1</span><br><span class="line">pip install torchvision==0.2.2</span><br></pre></td></tr></table></figure></p>
-<h3 id="5-检查安装是否成功："><a href="#5-检查安装是否成功：" class="headerlink" title="5. 检查安装是否成功："></a>5. 检查安装是否成功：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">import torch</span><br><span class="line">torch.cuda.is_available()</span><br></pre></td></tr></table></figure>
-<p>【参考文章】：</p>
-<ol>
-<li><a href="https://blog.csdn.net/qq_29762941/article/details/80630585" target="_blank" rel="noopener">https://blog.csdn.net/qq_29762941/article/details/80630585</a></li>
-<li><a href="https://blog.csdn.net/qq_29762941/article/details/80630585" target="_blank" rel="noopener">https://blog.csdn.net/qq_29762941/article/details/80630585</a></li>
+        <h1 id="FM"><a href="#FM" class="headerlink" title="FM"></a>FM</h1><p>FM常用于CTR估计，能够处理稀疏数据下的特征组合的问题。</p>
+<h2 id="FM原理"><a href="#FM原理" class="headerlink" title="FM原理"></a>FM原理</h2><p>一般的线性模型不考虑特征之间的关系，公式定义如下：<br>    <center> $y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}$         ...(1) </center><br>为了表达特征之间的相关性，利用多项式函数，定义如下：<br>    <center>$y=w_{0}+\sum_{i=1}^{n}x_{i}w_{i}+\sum_{i=1}^{n}\sum_{j=i+1}^{n}w_{i,j
+}x_{i}x_{j}$         ...(2)</center><br>如上述公式，定义的二阶特征参数有$\frac{n*(n-1)}{2}$个，同时当特征非常稀疏且纬度高时，不仅时间复杂度在增加，同时由于稀疏的特征，很多二阶特征系数通常学习不到。<br>为了解决上述的问题，FM对每个特征引入辅助向量$V_{i} = [v_{i1},v_{i2},…v_{ik}]^{T}$，此时每个特征学习到一个k纬向量而不是一个值，从而解决数据稀疏下到特征组合问题。此时模型如下：<center>$y = w_{0}+\sum_{i=0}^{n}w_{i}x_{i} + \sum_{i=1}^{n}\sum_{j=i+1}^{n}<v_{i},v_{j}>x_{i}x_{j}$        ...(3) </v_{i},v_{j}></center><br>其中k表示辅助向量的纬度，为超参数。上述表达式的时间复杂度为$kn^{2}$。为降低时间复杂度，对(3)式最后一项做如下变化：<br>$\sum _ { i = 1 } ^ { n } \sum _ { j = i + 1 } ^ { n } &lt; V _ { i } , V _ { j } &gt; x _ { i } x _ { j }$<br>$= \frac { 1 } { 2 } \sum _ { i = 1 } ^ { n } \sum _ { j = 1 } ^ { n } &lt; V _ { i } , V _ { j } &gt; x _ { i } x _ { j } - \frac { 1 } { 2 } \sum _ { i = 1 } ^ { n } &lt; V _ { i } , V _ { i } &gt; x _ { i } x _ { i }$<br>$=\frac{1}{2}(\sum_{i=1}^{n}\sum_{j=1}^{n}\sum_{f=1}^{k}v_{if}v_{jf}x_{i}x_{j} - \sum_{i=1}^{n}\sum_{f=1}^{k}v_{if}v_{if}x_ix_i)$<br>$=\frac{1}{2}\sum_{f=1}^{k}((\sum_{i=1}^{n}v_{if}x_{i})^2 - \sum_{i=1}^{n}(v_{if}x_i)^2)$</p>
+<p>通过上述变化可以发现，将公式(3)的时间复杂度从$kn^{2}$降低为$kn$。</p>
+<h2 id="FM优点"><a href="#FM优点" class="headerlink" title="FM优点"></a>FM优点</h2><ol>
+<li>通过引入辅助向量，能够解决稀疏数据的特征组合问题。</li>
+<li>模型的时间复杂度为线性的（kn）。</li>
+</ol>
+<h1 id="FFM"><a href="#FFM" class="headerlink" title="FFM"></a>FFM</h1><p>FFM(Field-aware Factorization Machine)为FM的改进版，区别是FM的辅助向量为K维，而FFM的辅助向量为F*K维，其中F为field个数。对应的FFM模型如下：<br>    <center>$y = w_{0}+\sum_{i=0}^{n}w_{i}x_{i} + \sum_{i=1}^{n}\sum_{j=i+1}^{n}<v_{i,f_{j}},v_{j,f_{i}}>x_{i}x_{j}$        ...(3) </v_{i,f_{j}},v_{j,f_{i}}></center><br>    其中$f_{i,f_{j}}$为i特征属于$f_{j}$下的辅助向量。由于FFM不能按照(3)进行化简，因此时间复杂度为$kn^{2}$。</p>
+<h2 id="FFM优缺点"><a href="#FFM优缺点" class="headerlink" title="FFM优缺点"></a>FFM优缺点</h2><ol>
+<li>与FM相比FFM具有field感知能力，模型能力更强。</li>
+<li>与FM相比，辅助向量变为F*K维学习参数变为FM的F倍。</li>
+<li>与FM相比，时间复杂度高。</li>
+</ol>
+<h1 id="DeepFM"><a href="#DeepFM" class="headerlink" title="DeepFM"></a>DeepFM</h1><p>由于FM/FFM使用的是一阶和二阶特征，为了学习更高阶特征，Huifeng Guo等人提出了DeepFM。<br>与DeepFM相似的模型有FNN，PNN，Wide&amp;deep，模型结构如下图所示：<br><img src="/2019/08/20/推荐之FM-FFM-Deep-FM/1.png" alt="1"><br>FNN使用预训练好的权重作为NN的输入，只能得到高阶特征组合，PNN则是在embedding层和第一层隐藏层中加入了product操作。Wide&amp;deep 的提出则是为了综合低阶特征组合和高阶特征组合，wide部分多为专家经过特征工程得到的低阶组合特征，而deep部分则通过NN网络学习到高阶特征。<br>DeepFM不仅可以达到Wide&amp;deep同时学习低阶特征组合和高阶特征组合的效果，同时想比于Wide&amp;deep网络的优点是，不需要专家经过特征组合筛选特征。网络结果如下：<br><img src="/2019/08/20/推荐之FM-FFM-Deep-FM/2.png" alt="2"></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li>DeepFM: A Factorization-Machine based Neural Network for CTR Prediction   [<a href="https://arxiv.org/pdf/1703.04247.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1703.04247.pdf</a>]</li>
+<li>推荐系统召回四模型之：全能的FM模型<br>[<a href="https://zhuanlan.zhihu.com/p/58160982" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/58160982</a>]</li>
+<li>CTR预估算法之FM, FFM, DeepFM及实践<br>[<a href="https://blog.csdn.net/John_xyz/article/details/78933253" target="_blank" rel="noopener">https://blog.csdn.net/John_xyz/article/details/78933253</a>]</li>
 </ol>
 
       
@@ -446,7 +442,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/" title="阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建">http://yoursite.com/2019/08/08/阿里云 cuda9.1+cudnn 7.1+pytorch 环境搭建/</a>
+    <a href="http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/" title="推荐之FM/FFM/Deep_FM">http://yoursite.com/2019/08/20/推荐之FM-FFM-Deep-FM/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -461,9 +457,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pytorch/" rel="tag"># pytorch</a>
-          
-            <a href="/tags/aliyun/" rel="tag"># aliyun</a>
+            <a href="/tags/FM-FFM-Deep-FM/" rel="tag"># FM/FFM/Deep_FM</a>
           
         </div>
       
@@ -476,8 +470,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/06/深度知识追踪/" rel="next" title="深度知识追踪">
-                <i class="fa fa-chevron-left"></i> 深度知识追踪
+              <a href="/2019/08/15/TF的三种模型的保存与加载方式/" rel="next" title="TF的三种模型的保存与加载方式">
+                <i class="fa fa-chevron-left"></i> TF的三种模型的保存与加载方式
               </a>
             
           </div>
@@ -485,10 +479,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/08/Exercise-Enhanced-Sequential-Modeling-for-Student-Performance-Prediction/" rel="prev" title="Exercise-Enhanced-Sequential-Modeling-for-Student-Performance-Prediction">
-                Exercise-Enhanced-Sequential-Modeling-for-Student-Performance-Prediction <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -629,7 +619,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-阿里云ECS-默认安装cuda-9-1版本"><span class="nav-number">1.</span> <span class="nav-text">1.阿里云ECS 默认安装cuda 9.1版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安装Anaconda："><span class="nav-number">2.</span> <span class="nav-text">2.  安装Anaconda：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-安装cudnn："><span class="nav-number">3.</span> <span class="nav-text">3. 安装cudnn：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-安装pytorch"><span class="nav-number">4.</span> <span class="nav-text">4. 安装pytorch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-检查安装是否成功："><span class="nav-number">5.</span> <span class="nav-text">5. 检查安装是否成功：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FM"><span class="nav-number">1.</span> <span class="nav-text">FM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FM原理"><span class="nav-number">1.1.</span> <span class="nav-text">FM原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FM优点"><span class="nav-number">1.2.</span> <span class="nav-text">FM优点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FFM"><span class="nav-number">2.</span> <span class="nav-text">FFM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FFM优缺点"><span class="nav-number">2.1.</span> <span class="nav-text">FFM优缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepFM"><span class="nav-number">3.</span> <span class="nav-text">DeepFM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
