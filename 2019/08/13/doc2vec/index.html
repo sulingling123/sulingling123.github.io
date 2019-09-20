@@ -90,7 +90,9 @@
 <meta property="og:description" content="Doc2vec常用于短文本向量化的方法包括：  Bag of words LDA Average word vectors tfidf-weighting word vector  上述方法存在公共的问题是没有考虑单词的顺序。而本文介绍的doc2vec是2014年谷歌的两位大牛Quoc Le 和 Tomas Mikolov提出的。文章提出一种无监督学习模型通过预测句子/段落中word来得到句子/段">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/08/13/doc2vec/1.jpg">
-<meta property="og:updated_time" content="2019-08-16T01:52:58.944Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/13/doc2vec/2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/13/doc2vec/3.jpg">
+<meta property="og:updated_time" content="2019-08-22T02:05:33.377Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="doc2vec">
 <meta name="twitter:description" content="Doc2vec常用于短文本向量化的方法包括：  Bag of words LDA Average word vectors tfidf-weighting word vector  上述方法存在公共的问题是没有考虑单词的顺序。而本文介绍的doc2vec是2014年谷歌的两位大牛Quoc Le 和 Tomas Mikolov提出的。文章提出一种无监督学习模型通过预测句子/段落中word来得到句子/段">
@@ -314,8 +316,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-16T09:52:58+08:00">
-                2019-08-16
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-22T10:05:33+08:00">
+                2019-08-22
               </time>
             
           </span>
@@ -364,7 +366,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  407
+                  950
                 </span>
               
 
@@ -380,7 +382,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -411,7 +413,24 @@
 <p>上述方法存在公共的问题是没有考虑单词的顺序。而本文介绍的doc2vec是2014年谷歌的两位大牛<a href="https://cs.stanford.edu/~quocle/paragraph_vector.pdf" target="_blank" rel="noopener">Quoc Le 和 Tomas Mikolov</a>提出的。文章提出一种无监督学习模型通过预测句子/段落中word来得到句子/段落/文档的向量表示。</p>
 <h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><h3 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h3><p>文章提出的得到句子/段落/文档向量的方法是受到word2vec的启发，因此先回顾一下word2vec。如下图所示，word2vec是通过给定单词预测另一个单词，如CBOW根据前后词预测中间词，以及Skip-gram根据中间词预测前后词。<br><img src="/2019/08/13/doc2vec/1.jpg" alt="1"><br>在模型中，每个词都用唯一的向量表示，是通过一个W矩阵通过index索引得到的每个词的向量表示，通过concat/average所有词的向量表示作为feature去预测另外一个词。在CBOW中，通过前后词预测中间词，模型最终优化的是最大化给定前后词的条件下当前词出现的概率，即：<center>$\frac{1}{T} \sum_{t=k}^{T-k} \log p\left(w_{t} | w_{t-k}, \ldots, w_{t+k}\right)$</center></p>
 <p>最终模型通过softmax得到每个词出现的概率：<center>$p\left(w_{t} | w_{t-k}, \ldots, w_{t+k}\right)=\frac{e^{y_{w_{t}}}}{\sum_{i} e^{y_{i}}}$</center></p>
-<p>原始论文中还提到使用层次softmax代替softmax来提升训练速度。详细细节见<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">原文</a>.</p>
+<p>上式中的$\boldsymbol{y}_{i}$是未归一化的每个词出现的概率：<center>$y=b+U h\left(w_{t-k}, \dots, w_{t+k} ; W\right)\qquad ...(1)$</center><br>原始论文中还提到使用层次softmax代替softmax来提升训练速度。详细细节见<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">原文</a>.</p>
+<h3 id="Paragraph-Vector：-A-distributed-memory-model"><a href="#Paragraph-Vector：-A-distributed-memory-model" class="headerlink" title="Paragraph Vector： A distributed memory model"></a>Paragraph Vector： A distributed memory model</h3><p>受word2vec的启发，Paragraph Vector也是通过给出上下文预测下一个word来进行学习的，对应的框架如下：<br><img src="/2019/08/13/doc2vec/2.jpg" alt="2"><br>每个段落/句子通过矩阵D映射到向量空间中，用D的一列代替，同样，每个单词也被映射到向量空间，用矩阵W的一列表示，然后通过段落/句子向量和词向量级连或求平均得到特征预测下一个单词。与word2vec唯一不同的是在计算$y_{i}$时的h是通过W和D average/concat 得到的。</p>
+<p>对于D我们可以理解为其他的word，它相当于是上下文的记忆单元活着这个段落的主题，因此我们叫这种训练方法为Distributed Memory Model of Paragraph Vector（PV-DM）。在训练时，通常采用固定长度的滑动窗口得到训练集，段落/句子向量在上下文中是共享的。</p>
+<p>总结doc2vec的过程主要是两步：</p>
+<ul>
+<li>训练阶段，在已知数据集上训练得到模型参数D，W，U，b</li>
+<li>预测阶段，得到未知段落的向量D即在固定W，U，b的情况下利用上述方法进行梯度下降，得到新的D（D中会加入表征新段落的column）</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>使用无监督学习，不需要大量有标记数据</li>
+<li>能够解决bag-of-words模型的缺点：<ul>
+<li>能够学到词之间的语义信息</li>
+<li>考虑到了词之间的顺序</li>
+</ul>
+</li>
+</ul>
+<h3 id="Paragraph-Vector-without-worf-ordering：-Distributed-bag-of-words"><a href="#Paragraph-Vector-without-worf-ordering：-Distributed-bag-of-words" class="headerlink" title="Paragraph Vector without worf ordering： Distributed bag of words"></a>Paragraph Vector without worf ordering： Distributed bag of words</h3><p>上面提到的训练方法是要综合paragraph vector和word vector去预测下一个词，另一种训练方法可以忽略词的上下文来预测随机从段落/句子采样得到的一个词，具体来说就是每次迭代训练时，采样一个窗口的文本，然后从窗口文本中随机选一个词做预测。我们称这种方法为Distributed Bag of Words version of Paragraph Vector（PV-DBOW）。模型架构如下：<br><img src="/2019/08/13/doc2vec/3.jpg" alt="3"></p>
 <hr>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h1><ol>
 <li><a href="https://cs.stanford.edu/~quocle/paragraph_vector.pdf" target="_blank" rel="noopener">Distributed Representations of Sentences and Documents</a></li>
@@ -556,7 +575,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -578,7 +597,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -618,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Doc2vec"><span class="nav-number">1.</span> <span class="nav-text">Doc2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#word2vec"><span class="nav-number">1.1.1.</span> <span class="nav-text">word2vec</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Doc2vec"><span class="nav-number">1.</span> <span class="nav-text">Doc2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#word2vec"><span class="nav-number">1.1.1.</span> <span class="nav-text">word2vec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Paragraph-Vector：-A-distributed-memory-model"><span class="nav-number">1.1.2.</span> <span class="nav-text">Paragraph Vector： A distributed memory model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Paragraph-Vector-without-worf-ordering：-Distributed-bag-of-words"><span class="nav-number">1.1.3.</span> <span class="nav-text">Paragraph Vector without worf ordering： Distributed bag of words</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
             
 
           </div>
@@ -659,7 +678,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">10.4k</span>
+    <span title="Site words total count">13.1k</span>
   
 </div>
 

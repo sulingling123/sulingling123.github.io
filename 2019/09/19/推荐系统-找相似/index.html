@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MinHash/LSH,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="数据挖掘日常笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="前言最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的各种坑。 传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计">
+<meta name="keywords" content="MinHash&#x2F;LSH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="推荐系统-找相似">
+<meta property="og:url" content="http://yoursite.com/2019/09/19/推荐系统-找相似/index.html">
+<meta property="og:site_name" content="数据挖掘日常笔记">
+<meta property="og:description" content="前言最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的各种坑。 传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/09/19/推荐系统-找相似/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/19/推荐系统-找相似/2.jpg">
+<meta property="og:updated_time" content="2019-09-20T07:19:55.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="推荐系统-找相似">
+<meta name="twitter:description" content="前言最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的各种坑。 传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/19/推荐系统-找相似/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/19/推荐系统-找相似/">
+
+
+
+
+
+  <title>推荐系统-找相似 | 数据挖掘日常笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据挖掘日常笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Zoe的博客 | Zoe Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/19/推荐系统-找相似/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">推荐系统-找相似</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-19T16:11:10+08:00">
+                2019-09-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-20T15:19:55+08:00">
+                2019-09-20
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的各种坑。</p>
+<p>传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计算的方法，损失一部分精度来换取计算的效率。</p>
+<p>最开始准备采用Facebook的Faiss框架来计算相似度，但是基于一是准备用go做服务，Faiss没有官方提供go的接口需要手动编译，二是计算用户相似度时，数据是动态的，用起来不那么方便，因此弃用Faiss转向LSH来计算用户的相似度。下面详述Min hashing和LSH（local sensitive hashing）原理。</p>
+<h1 id="Hash-Functions"><a href="#Hash-Functions" class="headerlink" title="Hash Functions"></a>Hash Functions</h1><p>大家应该经常能听到哈希，也用过java类或相似的包来计算哈希值，哈希函数根据hash-key可以产生一个bucket number作为其存储位置，因此可以快速查询。hash table就是根据key-value通过hash function（记为f）得到映射的值进行寻址直接访问的数据结构。</p>
+<ol>
+<li>对于不同的key得到同样的散列地址，即$k_{1}≠ k_{2}$但$f_{1} = f_{2}$，我们称之为碰撞。</li>
+<li>若对于所有的key经过hash function的映射到每一个地址的概率是相等的，则成为均匀散列函数。</li>
+</ol>
+<h1 id="Min-Hashing"><a href="#Min-Hashing" class="headerlink" title="Min Hashing"></a>Min Hashing</h1><h2 id="Jaccard相似度"><a href="#Jaccard相似度" class="headerlink" title="Jaccard相似度"></a>Jaccard相似度</h2><p>Jaccard index用于计算相似度，是距离的一种度量方式，假设有结合$S_{1}$和$S_{2}$，我们定义<center>$Jaccard(S_{1}, S_{2})=\frac{S_{1}∩S_{2}}{S_{1}∪S_{2}}$</center></p>
+<h2 id="Minhash"><a href="#Minhash" class="headerlink" title="Minhash"></a>Minhash</h2><p>Min Hashing是LSH的一种，可以用于快速估计两个向量的相似度。Min Hashing和Jaccard相似度有很大的关系：</p>
+<pre><code>对两个向量进行Min Hashing，产生的哈希值相同的概率等于两个向量的Jaccard相似度
+                                                            -- (1)
+</code></pre><p>通过MinHash得到映射分两步：</p>
+<ul>
+<li>首先对row进行permutation，每个向量做同样的操作</li>
+<li>向量的MinHash值对应permutation后，取值为非零的第一行的row index</li>
+</ul>
+<p>考虑为什么通过Minhash可以达到上述(1)所说的效果呢？我们举例如下，有四个向量，每个向量有5行（我们可以把列看作User，行看作Item，即User$S_{1}$购买过2，3商品…）：</p>
+<p>表1:<br> || $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$<br>-|-|-|-|-<br>0 | 1 | 0 | 0 | 1 |<br>1 | 0 | 0 | 1 | 0 |<br>2 | 0 | 1 | 0 | 1 |<br>3 | 1 | 0 | 1 | 1 |<br>4 | 0 | 0 | 1 | 0 |</p>
+<p>我们看$S_{1}$和$S_{2}$，每一行的取值分三种情况：</p>
+<ol>
+<li>$S_{1}$和$S_{2}$同为1</li>
+<li>$S_{1}$和$S_{2}$一个为0一个为1</li>
+<li>$S_{1}$和$S_{2}$同为0</li>
+</ol>
+<p>由于矩阵通常很稀疏，因此大部分为情况3，但是1和2决定来Jaccard($S_{1}$,$S_{2}$)和$h\left(S_{1}\right)=h\left(S_{2}\right)$概率，假设情况1有x行，情况2有y行，则$\operatorname{Jaccard}\left(S_{1}, S_{2}\right)=\frac{x}{x+y}$（x相当于$S_{1} \cap S_{2}$，y相当于$S_{1} \cup S_{2}$）,若Permutation是随机的，则$S_{1}$和$S_{2}$从上向下找第一个非零属于情况1的概括为$\frac{x}{x+y}$。 </p>
+<h2 id="Min-Hashing-signatures"><a href="#Min-Hashing-signatures" class="headerlink" title="Min Hashing signatures"></a>Min Hashing signatures</h2><p>如何通过Min Hashing产生签名呢？</p>
+<p>对向量做m次permutation(m一般为几百或更小，小于原向量长度n)，每一次经过permutation得到minhash记为$h_{1}, h_{2}, \ldots, h_{m}$， 则向量获得的签名可以表示为：<center>$\operatorname{sig}(A)=\left[h_{1}(A), h_{2}(A), \ldots, h_{m}(A)\right]$</center><br>对于一个高维度的向量进行permutation也是非常耗时的，因此可以随机选择m个哈希函数代替permutation。具体做法如下：</p>
+<ol>
+<li>取m个针对row index的哈希函数$h_{1},h_{2}, \ldots, h_{m}$将原始0,1…n-1映射到0,1…n-1上</li>
+<li>记Sig(i,c)为第c列在第i个哈希函数下的MinHash值，初始值记做$\infty$</li>
+<li>对于每一行r<ul>
+<li>计算$h_{1}(r),h_{2}(r),\ldots,h_{m}(r)$</li>
+<li>对于每列c：<ul>
+<li>如果c在r行取值为0，忽略</li>
+<li>如果c在r行取值为1，则对$i=1,2,…,m$计算Sig(i,c) = Min(Sig(i,c),$h_{i}(r)$)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>对表1所示数据，我们举例说明Min Hashing签名生成过程，假设我们选择两个哈希函数对row index生成MinHash，如下表2所示：$h_{1}(x) = x+1  \mod 5$, $h_{2}(x) = 3x+1 \mod 5$</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+<th>x+1 mod 5</th>
+<th>3x+1 mod 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>5</td>
+<td>3</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>初始时，甚至哈希签名如下：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | $\infty$ | $\infty$ | $\infty$ | $\infty$ |<br>$h_{2}$ | $\infty$ | $\infty$ | $\infty$ | $\infty$ |<br>对于第0行，只有$S_{1}$ 和$S_{4}$为非零，且$h_{1}$和$h_{2}$均为1,则当前签名矩阵变为</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_{1}$</td>
+<td>1</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>$h_{2}$</td>
+<td>1</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>对于第1行，$S_{3}$为1，对于$h_{1}$和$h_{2}为2和4，则签名矩阵变为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | $\infty$ |2 | 1 |<br>$h_{2}$ | 1 | $\infty$ | 4 | 1 |</p>
+<p>继续至第2行，$S_{2}$ 和$S_{4}$为非零，对应$h_{1}$和$h_{2}为3和2，$S_{4}$目前的值均为1，小于$h_{1}$，$h_{2}$对应的3和2，则签名矩阵变为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | 3 |2 | 1 |<br>$h_{2}$ | 1 | 2 | 4 | 1 |</p>
+<p>…<br>最后扫描完第4行，最后得到签名矩阵为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | 3 | 0 | 1 |<br>$h_{2}$ | 0 | 2 | 0 | 0 |</p>
+<p>通过上述过程可以看到，实际的$Jaccard(S_{1},S_{4})=2/3$，但通过签名计算得到的$Jaccard(S_{1},S_{4})=1$，是由于示例只选择了两个哈希函数，在实际应用中，会选择更多的哈希函数并且向量数往往在百万千万级，这时就会比较相近了。</p>
+<h1 id="Local-Sensitive-Hashing-LSH"><a href="#Local-Sensitive-Hashing-LSH" class="headerlink" title="Local Sensitive Hashing(LSH)"></a>Local Sensitive Hashing(LSH)</h1><p>经过Min Hashing，我们可以实现数据降维并保证降维后的数据保持原空间的相似度，降低了在物品维度很高时计算相似度的时间复杂度，但是当用户数巨大时，计算两两相似度仍旧需要很高的时间开销，如何进一步降低寻找相似用户的复杂度，就需要LSH这样一个近似算法来实现。</p>
+<p>LSH常见的做法是经过多次哈希将相似的向量散列到相同的桶中，检索时，我们只需要考虑相同桶中的任意对作为候选集即可。我们称不相似的向量被散列到相同的桶样本为false positive，相似的向量被散列到不同到桶中的样本称为false negetive。</p>
+<p>在有来Min Hashing签名的基础上，一个有效的办法是将签名分段，我们称之为band。如下图所示：<br><img src="/2019/09/19/推荐系统-找相似/1.jpg" alt="1"></p>
+<p>每个签名都被分成4段，向量的签名散列到对应的band上，如果band相同的越多，则其相似度越高。我们可以通过band获取candidate，计算candidate相似用户的相似度就好了。</p>
+<h2 id="如何选择band数？"><a href="#如何选择band数？" class="headerlink" title="如何选择band数？"></a>如何选择band数？</h2><p>假设我们有b和band，每个band有r行，即总的Min Hashing签名长度为b*r，假设两个向量的Jaccard相似度为s，则：</p>
+<ol>
+<li>对于某一个band，所有行都相等的概率为：$s^r$</li>
+<li>对于某一个band，至少有一行不同的概率为：$1 - s^r$</li>
+<li>对所有band，至少有一行不同的概率为： $(1 - s^r)^b$</li>
+<li>至少有一个band的所有行都相等的概率为： $1- (1 - s^r)^b$，即两个用户成为candidate的概率</li>
+</ol>
+<p>上述概率在r，b不同值时为一个S曲线，如当r=6，b=100时的曲线如下图：</p>
+<p><img src="/2019/09/19/推荐系统-找相似/2.jpg" alt="2"></p>
+<p>我们定义超过0.5的概率就有可能成为candidate，此时对应的相似度称为threshold:<center>$threshold \approx (\frac{1}{b})^{(\frac{1}{r})}$</center></p>
+<p>在实际应用中，我们需要先确定最小相似度，即相似度大于多少我们认为可以作为candidate，然后确定哈希签名的长度进而可以确定b和r。我们需要考虑的是：</p>
+<ul>
+<li>我们想要尽可能少出现false negative，我们需要选择b和r使得thresh&lt; 我们定义的最小相似度。</li>
+<li>如果要保证计算速度快并尽可能少出现false positive，我们需要选择b和r使得thresh&gt;最小相似度。</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h1><ol>
+<li>Mining of massive datasets；  Jeffrey D. Ullman Anand Rajaraman, Jure Leskovec.</li>
+<li><a href="https://zhuanlan.zhihu.com/p/46164294" target="_blank" rel="noopener">大规模数据的相似度计算：LSH算法</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Zoe
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/09/19/推荐系统-找相似/" title="推荐系统-找相似">http://yoursite.com/2019/09/19/推荐系统-找相似/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MinHash-LSH/" rel="tag"># MinHash/LSH</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/20/推荐之FM-FFM-Deep-FM/" rel="next" title="推荐之FM/FFM/Deep_FM">
+                <i class="fa fa-chevron-left"></i> 推荐之FM/FFM/Deep_FM
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Zoe">
+            
+              <p class="site-author-name" itemprop="name">Zoe</p>
+              <p class="site-description motion-element" itemprop="description">Every failure is leading towards success.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash-Functions"><span class="nav-number">2.</span> <span class="nav-text">Hash Functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Min-Hashing"><span class="nav-number">3.</span> <span class="nav-text">Min Hashing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jaccard相似度"><span class="nav-number">3.1.</span> <span class="nav-text">Jaccard相似度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minhash"><span class="nav-number">3.2.</span> <span class="nav-text">Minhash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Min-Hashing-signatures"><span class="nav-number">3.3.</span> <span class="nav-text">Min Hashing signatures</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Local-Sensitive-Hashing-LSH"><span class="nav-number">4.</span> <span class="nav-text">Local Sensitive Hashing(LSH)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择band数？"><span class="nav-number">4.1.</span> <span class="nav-text">如何选择band数？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">5.</span> <span class="nav-text">参考文献:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zoe</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">13.1k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
