@@ -314,7 +314,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-09-20T15:21:10+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-20T15:32:35+08:00">
                 2019-09-20
               </time>
             
@@ -403,15 +403,15 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的各种坑。</p>
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的坑。</p>
 <p>传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计算的方法，损失一部分精度来换取计算的效率。</p>
-<p>最开始准备采用Facebook的Faiss框架来计算相似度，但是基于一是准备用go做服务，Faiss没有官方提供go的接口需要手动编译，二是计算用户相似度时，数据是动态的，用起来不那么方便，因此弃用Faiss转向LSH来计算用户的相似度。下面详述Min hashing和LSH（local sensitive hashing）原理。</p>
-<h1 id="Hash-Functions"><a href="#Hash-Functions" class="headerlink" title="Hash Functions"></a>Hash Functions</h1><p>大家应该经常能听到哈希，也用过java类或相似的包来计算哈希值，哈希函数根据hash-key可以产生一个bucket number作为其存储位置，因此可以快速查询。hash table就是根据key-value通过hash function（记为f）得到映射的值进行寻址直接访问的数据结构。</p>
+<p>最开始准备采用Facebook的Faiss框架来计算相似度，但是由于准备用go做服务，Faiss没有官方提供go的接口需要手动编译，而且计算用户相似度时，数据是动态的，用起来不那么方便，因此弃用Faiss转向LSH来计算用户的相似度。下面详述Min hashing和LSH（local sensitive hashing）原理。</p>
+<h1 id="Hash-Functions"><a href="#Hash-Functions" class="headerlink" title="Hash Functions"></a>Hash Functions</h1><p>大家应该经常能听到哈希，也用过java类或相似的包来计算哈希值，哈希函数根据hash-key可以产生一个bucket number作为其存储位置，因此可以快速查询。hash table就是根据key-value通过hash function（记为h）得到映射的值进行寻址直接访问的数据结构。</p>
 <ol>
-<li>对于不同的key得到同样的散列地址，即$k_{1}≠ k_{2}$但$f_{1} = f_{2}$，我们称之为碰撞。</li>
+<li>对于不同的key得到同样的散列地址，即$k_{1}≠ k_{2}$但$h_{1} = h_{2}$，我们称之为碰撞。</li>
 <li>若对于所有的key经过hash function的映射到每一个地址的概率是相等的，则成为均匀散列函数。</li>
 </ol>
-<h1 id="Min-Hashing"><a href="#Min-Hashing" class="headerlink" title="Min Hashing"></a>Min Hashing</h1><h2 id="Jaccard相似度"><a href="#Jaccard相似度" class="headerlink" title="Jaccard相似度"></a>Jaccard相似度</h2><p>Jaccard index用于计算相似度，是距离的一种度量方式，假设有结合$S_{1}$和$S_{2}$，我们定义<center>$Jaccard(S_{1}, S_{2})=\frac{S_{1}∩S_{2}}{S_{1}∪S_{2}}$</center></p>
+<h1 id="Min-Hashing"><a href="#Min-Hashing" class="headerlink" title="Min Hashing"></a>Min Hashing</h1><h2 id="Jaccard相似度"><a href="#Jaccard相似度" class="headerlink" title="Jaccard相似度"></a>Jaccard相似度</h2><p>Jaccard index用于计算相似度，是距离的一种度量方式，假设有向量$S_{1}$和$S_{2}$，我们定义<center>$Jaccard(S_{1}, S_{2})=\frac{S_{1}∩S_{2}}{S_{1}∪S_{2}}$</center></p>
 <h2 id="Minhash"><a href="#Minhash" class="headerlink" title="Minhash"></a>Minhash</h2><p>Min Hashing是LSH的一种，可以用于快速估计两个向量的相似度。Min Hashing和Jaccard相似度有很大的关系：</p>
 <pre><code>对两个向量进行Min Hashing，产生的哈希值相同的概率等于两个向量的Jaccard相似度
                                                             -- (1)
@@ -420,15 +420,71 @@
 <li>首先对row进行permutation，每个向量做同样的操作</li>
 <li>向量的MinHash值对应permutation后，取值为非零的第一行的row index</li>
 </ul>
-<p>考虑为什么通过Minhash可以达到上述(1)所说的效果呢？我们举例如下，有四个向量，每个向量有5行（我们可以把列看作User，行看作Item，即User$S_{1}$购买过2，3商品…）：</p>
-<p>表1:<br>|  | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$<br>-|-|-|-|-<br>0 | 1 | 0 | 0 | 1 |<br>1 | 0 | 0 | 1 | 0 |<br>2 | 0 | 1 | 0 | 1 |<br>3 | 1 | 0 | 1 | 1 |<br>4 | 0 | 0 | 1 | 0 |</p>
+<p>考虑为什么通过Minhash可以达到上述(1)所说的效果呢？我们举例如下，有四个向量，每个向量有5行（维）（我们可以把列看作User，行看作Item，即User$S_{1}$购买过2，3商品…）：</p>
+<p>表1:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>我们看$S_{1}$和$S_{2}$，每一行的取值分三种情况：</p>
 <ol>
 <li>$S_{1}$和$S_{2}$同为1</li>
 <li>$S_{1}$和$S_{2}$一个为0一个为1</li>
 <li>$S_{1}$和$S_{2}$同为0</li>
 </ol>
-<p>由于矩阵通常很稀疏，因此大部分为情况3，但是1和2决定来Jaccard($S_{1}$,$S_{2}$)和$h\left(S_{1}\right)=h\left(S_{2}\right)$概率，假设情况1有x行，情况2有y行，则$\operatorname{Jaccard}\left(S_{1}, S_{2}\right)=\frac{x}{x+y}$（x相当于$S_{1} \cap S_{2}$，y相当于$S_{1} \cup S_{2}$）,若Permutation是随机的，则$S_{1}$和$S_{2}$从上向下找第一个非零属于情况1的概括为$\frac{x}{x+y}$。 </p>
+<p>由于矩阵通常很稀疏（考虑实际中用户与购买物品的矩阵），因此大部分为情况3，但是1和2决定来Jaccard($S_{1}$,$S_{2}$)和$h\left(S_{1}\right)=h\left(S_{2}\right)$概率，假设情况1有x行，情况2有y行，则$\operatorname{Jaccard}\left(S_{1}, S_{2}\right)=\frac{x}{x+y}$（x相当于$S_{1} \cap S_{2}$，y相当于$S_{1} \cup S_{2}$）,若Permutation是随机的，则$S_{1}$和$S_{2}$从上向下找第一个非零属于情况1的概括为$\frac{x}{x+y}$。 </p>
 <h2 id="Min-Hashing-signatures"><a href="#Min-Hashing-signatures" class="headerlink" title="Min Hashing signatures"></a>Min Hashing signatures</h2><p>如何通过Min Hashing产生签名呢？</p>
 <p>对向量做m次permutation(m一般为几百或更小，小于原向量长度n)，每一次经过permutation得到minhash记为$h_{1}, h_{2}, \ldots, h_{m}$， 则向量获得的签名可以表示为：<center>$\operatorname{sig}(A)=\left[h_{1}(A), h_{2}(A), \ldots, h_{m}(A)\right]$</center><br>对于一个高维度的向量进行permutation也是非常耗时的，因此可以随机选择m个哈希函数代替permutation。具体做法如下：</p>
 <ol>
@@ -513,7 +569,40 @@
 </tbody>
 </table>
 </div>
-<p>初始时，甚至哈希签名如下：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | $\infty$ | $\infty$ | $\infty$ | $\infty$ |<br>$h_{2}$ | $\infty$ | $\infty$ | $\infty$ | $\infty$ |<br>对于第0行，只有$S_{1}$ 和$S_{4}$为非零，且$h_{1}$和$h_{2}$均为1,则当前签名矩阵变为</p>
+<p>初始时，哈希签名如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_{1}$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td></td>
+</tr>
+<tr>
+<td>$h_{2}$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td>$\infty$</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>对于第0行，只有$S_{1}$ 和$S_{4}$为非零，且$h_{1}$和$h_{2}$均为1,则当前签名矩阵变为</p>
 <div class="table-container">
 <table>
 <thead>
@@ -546,10 +635,107 @@
 </tbody>
 </table>
 </div>
-<p>对于第1行，$S_{3}$为1，对于$h_{1}$和$h_{2}为2和4，则签名矩阵变为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | $\infty$ |2 | 1 |<br>$h_{2}$ | 1 | $\infty$ | 4 | 1 |</p>
-<p>继续至第2行，$S_{2}$ 和$S_{4}$为非零，对应$h_{1}$和$h_{2}为3和2，$S_{4}$目前的值均为1，小于$h_{1}$，$h_{2}$对应的3和2，则签名矩阵变为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | 3 |2 | 1 |<br>$h_{2}$ | 1 | 2 | 4 | 1 |</p>
-<p>…<br>最后扫描完第4行，最后得到签名矩阵为：<br>|   | $S_{1}$ |  $S_{2}$  | $S_{3}$ | $S_{4}$  |<br>-|-|-|-|-|-|<br>$h_{1}$ | 1 | 3 | 0 | 1 |<br>$h_{2}$ | 0 | 2 | 0 | 0 |</p>
-<p>通过上述过程可以看到，实际的$Jaccard(S_{1},S_{4})=2/3$，但通过签名计算得到的$Jaccard(S_{1},S_{4})=1$，是由于示例只选择了两个哈希函数，在实际应用中，会选择更多的哈希函数并且向量数往往在百万千万级，这时就会比较相近了。</p>
+<p>对于第1行，$S_{3}$为1，对于$h_{1}$和$h_{2}$为2和4，则签名矩阵变为：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_{1}$</td>
+<td>1</td>
+<td>$\infty$</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>$h_{2}$</td>
+<td>1</td>
+<td>$\infty$</td>
+<td>4</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>继续至第2行，$S_{2}$ 和$S_{4}$为非零，对应$h_{1}$和$h_{2}为3和2，$S_{4}$目前的值均为1，小于$h_{1}$，$h_{2}$对应的3和2，则签名矩阵变为：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_{1}$</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>$h_{2}$</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>…</p>
+<p>最后扫描完第4行，最后得到签名矩阵为：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>$S_{1}$</th>
+<th>$S_{2}$</th>
+<th>$S_{3}$</th>
+<th>$S_{4}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$h_{1}$</td>
+<td>1</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>$h_{2}$</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>通过上述过程可以看到，实际的$Jaccard(S_{1},S_{4})=2/3$，但通过签名计算得到的$Jaccard(S_{1},S_{4})=1$，上述结果是由于示例只选择了两个哈希函数，在实际应用中，会选择更多的哈希函数并且向量数往往在百万千万级，这时就会比较相近了。</p>
 <h1 id="Local-Sensitive-Hashing-LSH"><a href="#Local-Sensitive-Hashing-LSH" class="headerlink" title="Local Sensitive Hashing(LSH)"></a>Local Sensitive Hashing(LSH)</h1><p>经过Min Hashing，我们可以实现数据降维并保证降维后的数据保持原空间的相似度，降低了在物品维度很高时计算相似度的时间复杂度，但是当用户数巨大时，计算两两相似度仍旧需要很高的时间开销，如何进一步降低寻找相似用户的复杂度，就需要LSH这样一个近似算法来实现。</p>
 <p>LSH常见的做法是经过多次哈希将相似的向量散列到相同的桶中，检索时，我们只需要考虑相同桶中的任意对作为候选集即可。我们称不相似的向量被散列到相同的桶样本为false positive，相似的向量被散列到不同到桶中的样本称为false negetive。</p>
 <p>在有来Min Hashing签名的基础上，一个有效的办法是将签名分段，我们称之为band。如下图所示：<br><img src="/2019/09/19/推荐系统-找相似/1.jpg" alt="1"></p>
