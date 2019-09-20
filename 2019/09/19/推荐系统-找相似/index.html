@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/09/19/推荐系统-找相似/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/09/19/推荐系统-找相似/2.jpg">
-<meta property="og:updated_time" content="2019-09-20T07:39:58.328Z">
+<meta property="og:updated_time" content="2019-09-20T07:41:39.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="推荐系统-找相似">
 <meta name="twitter:description" content="前言最近做推荐，召回其中的一个策略是采用协同过滤的算法，本来觉得不就是简单的一通计算相似度取topK相似用户做推荐就好嘛！但是真正做起来就要踩“大数据”的坑。 传统的基于协同过滤，核心在于计算相似度找到topK相似用户/物品，无论哪种计算相似度的时间复杂度都会随着用户/物品规模的扩大而呈平方增长，对于实际应用中，用户/物品往往达到千万甚至更多，因此暴力计算相似度显然不可行，这时就需要采用近似计算的">
@@ -315,7 +315,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-09-20T15:39:58+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-20T15:41:39+08:00">
                 2019-09-20
               </time>
             
@@ -438,40 +438,35 @@
 <td>1</td>
 <td>0</td>
 <td>0</td>
-<td>1</td>
-<td></td>
+<td>1       </td>
 </tr>
 <tr>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
-<td>0</td>
-<td></td>
+<td>0 </td>
 </tr>
 <tr>
 <td>2</td>
 <td>0</td>
 <td>1</td>
 <td>0</td>
-<td>1</td>
-<td></td>
+<td>1 </td>
 </tr>
 <tr>
 <td>3</td>
 <td>1</td>
 <td>0</td>
 <td>1</td>
-<td>1</td>
-<td></td>
+<td>1 </td>
 </tr>
 <tr>
 <td>4</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
-<td>0</td>
-<td></td>
+<td>0 </td>
 </tr>
 </tbody>
 </table>
@@ -520,8 +515,7 @@
 <td>0</td>
 <td>1</td>
 <td>1</td>
-<td>1</td>
-<td></td>
+<td>1       </td>
 </tr>
 <tr>
 <td>1</td>
@@ -530,8 +524,7 @@
 <td>1</td>
 <td>0</td>
 <td>2</td>
-<td>4</td>
-<td></td>
+<td>4 </td>
 </tr>
 <tr>
 <td>2</td>
@@ -540,8 +533,7 @@
 <td>0</td>
 <td>1</td>
 <td>3</td>
-<td>2</td>
-<td></td>
+<td>2 </td>
 </tr>
 <tr>
 <td>3</td>
@@ -550,8 +542,7 @@
 <td>1</td>
 <td>1</td>
 <td>4</td>
-<td>0</td>
-<td></td>
+<td>0 </td>
 </tr>
 <tr>
 <td>4</td>
@@ -560,8 +551,7 @@
 <td>1</td>
 <td>0</td>
 <td>5</td>
-<td>3</td>
-<td></td>
+<td>3 </td>
 </tr>
 </tbody>
 </table>
@@ -575,7 +565,7 @@
 <th>$S_{1}$</th>
 <th>$S_{2}$</th>
 <th>$S_{3}$</th>
-<th>$S_{4}$</th>
+<th>$S_{4}$  </th>
 </tr>
 </thead>
 <tbody>
@@ -584,16 +574,14 @@
 <td>$\infty$</td>
 <td>$\infty$</td>
 <td>$\infty$</td>
-<td>$\infty$</td>
-<td></td>
+<td>$\infty$        </td>
 </tr>
 <tr>
 <td>$h_{2}$</td>
 <td>$\infty$</td>
 <td>$\infty$</td>
 <td>$\infty$</td>
-<td>$\infty$</td>
-<td></td>
+<td>$\infty$   </td>
 </tr>
 </tbody>
 </table>
@@ -607,7 +595,7 @@
 <th>$S_{1}$</th>
 <th>$S_{2}$</th>
 <th>$S_{3}$</th>
-<th>$S_{4}$</th>
+<th>$S_{4}$  </th>
 </tr>
 </thead>
 <tbody>
@@ -616,16 +604,14 @@
 <td>1</td>
 <td>$\infty$</td>
 <td>$\infty$</td>
-<td>1</td>
-<td></td>
+<td>1       </td>
 </tr>
 <tr>
 <td>$h_{2}$</td>
 <td>1</td>
 <td>$\infty$</td>
 <td>$\infty$</td>
-<td>1</td>
-<td></td>
+<td>1 </td>
 </tr>
 </tbody>
 </table>
@@ -639,7 +625,7 @@
 <th>$S_{1}$</th>
 <th>$S_{2}$</th>
 <th>$S_{3}$</th>
-<th>$S_{4}$</th>
+<th>$S_{4}$  </th>
 </tr>
 </thead>
 <tbody>
@@ -648,16 +634,14 @@
 <td>1</td>
 <td>$\infty$</td>
 <td>2</td>
-<td>1</td>
-<td></td>
+<td>1        </td>
 </tr>
 <tr>
 <td>$h_{2}$</td>
 <td>1</td>
 <td>$\infty$</td>
 <td>4</td>
-<td>1</td>
-<td></td>
+<td>1 </td>
 </tr>
 </tbody>
 </table>
@@ -671,7 +655,7 @@
 <th>$S_{1}$</th>
 <th>$S_{2}$</th>
 <th>$S_{3}$</th>
-<th>$S_{4}$</th>
+<th>$S_{4}$  </th>
 </tr>
 </thead>
 <tbody>
@@ -680,16 +664,14 @@
 <td>1</td>
 <td>3</td>
 <td>2</td>
-<td>1</td>
-<td></td>
+<td>1        </td>
 </tr>
 <tr>
 <td>$h_{2}$</td>
 <td>1</td>
 <td>2</td>
 <td>4</td>
-<td>1</td>
-<td></td>
+<td>1 </td>
 </tr>
 </tbody>
 </table>
@@ -704,7 +686,7 @@
 <th>$S_{1}$</th>
 <th>$S_{2}$</th>
 <th>$S_{3}$</th>
-<th>$S_{4}$</th>
+<th>$S_{4}$  </th>
 </tr>
 </thead>
 <tbody>
@@ -713,16 +695,14 @@
 <td>1</td>
 <td>3</td>
 <td>0</td>
-<td>1</td>
-<td></td>
+<td>1       </td>
 </tr>
 <tr>
 <td>$h_{2}$</td>
 <td>0</td>
 <td>2</td>
 <td>0</td>
-<td>0</td>
-<td></td>
+<td>0 </td>
 </tr>
 </tbody>
 </table>
