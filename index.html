@@ -267,6 +267,195 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/spark-with-tfrecords/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/spark-with-tfrecords/" itemprop="url">spark_with_tfrecords</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T17:13:35+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-24T17:49:52+08:00">
+                2019-09-24
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  944
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="spark-tensorflow-connector"><a href="#spark-tensorflow-connector" class="headerlink" title="spark-tensorflow-connector"></a>spark-tensorflow-connector</h1><p>spark-tensorflow-connector是tensorflow提供的解决如何利用spark生成tfrecord文件的解决方案</p>
+<h2 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h2><ol>
+<li>git clone <a href="https://github.com/tensorflow/ecosystem" target="_blank" rel="noopener">https://github.com/tensorflow/ecosystem</a></li>
+<li><p>安装并配置maven</p>
+<p> 2.1 下载maven压缩包 <a href="http://maven.apache.org/download.cgi" target="_blank" rel="noopener">http://maven.apache.org/download.cgi</a></p>
+<p> 2.2 解压缩到指定目录</p>
+<p> 2.3 配置～/.bash_profile</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> M2_HOME=/Users/xxx/apache-maven-3.3.3</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$M2_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+<p> 2.4 source ～/.bash_profile使配置生效</p>
+<p> 2.5 mvn -v 查看maven配置成功</p>
+<p> （如果失败，请配置JAVA_HOME）</p>
+</li>
+<li><p>intellij打开 xx/ecosystem/hadoop 工程， 执行maven clean &amp; install</p>
+<p>若出现一下错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] Failed to execute goal org.apache.maven.plugins:maven-javadoc-plugin:2.9:jar (attach-javadocs) on project template.querylist: MavenReportException: Error while creating archive: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set. -&gt; [Help 1]</span><br></pre></td></tr></table></figure>
+<p>可以修改POM配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">javadocExecutable</span>&gt;</span>$&#123;java.home&#125;/../bin/javadoc<span class="tag">&lt;/<span class="name">javadocExecutable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>intellij打开 xx/ecosystem/spark/spark-tensorflow-connector工程， 执行maven clean &amp; install 得到最终到spark-tensorflow-connector_2.11-1.10.0.jar</p>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>官方给出的scala example：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xxx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scala.collection.<span class="type">JavaConversions</span>._;</span><br><span class="line"><span class="keyword">import</span> scala.collection.<span class="type">JavaConverters</span>._;</span><br><span class="line"><span class="keyword">import</span> collection.<span class="type">JavaConversions</span>._</span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.&#123; <span class="type">Level</span>, <span class="type">Logger</span> &#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.<span class="type">SparkConf</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123; <span class="type">DataFrame</span>, <span class="type">Row</span> &#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.catalyst.expressions.<span class="type">GenericRow</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TFRecordsExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="type">Logger</span>.getLogger(<span class="string">"org.apache.spark"</span>).setLevel(<span class="type">Level</span>.<span class="type">WARN</span>)</span><br><span class="line">    <span class="type">Logger</span>.getLogger(<span class="string">"org.eclipse.jetty.server"</span>).setLevel(<span class="type">Level</span>.<span class="type">OFF</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span>.builder().master(<span class="string">"local[4]"</span>).appName(<span class="string">"tfrecords_examples"</span>).getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> path = <span class="string">"file/test-output.tfrecord"</span></span><br><span class="line">    <span class="keyword">val</span> testRows: <span class="type">Array</span>[<span class="type">Row</span>] = <span class="type">Array</span>(</span><br><span class="line">      <span class="keyword">new</span> <span class="type">GenericRow</span>(<span class="type">Array</span>[<span class="type">Any</span>](<span class="number">11</span>, <span class="number">1</span>, <span class="number">23</span>L, <span class="number">10.0</span>F, <span class="number">14.0</span>, <span class="type">List</span>(<span class="number">1.0</span>, <span class="number">2.0</span>), <span class="string">"r1"</span>)),</span><br><span class="line">      <span class="keyword">new</span> <span class="type">GenericRow</span>(<span class="type">Array</span>[<span class="type">Any</span>](<span class="number">21</span>, <span class="number">2</span>, <span class="number">24</span>L, <span class="number">12.0</span>F, <span class="number">15.0</span>, <span class="type">List</span>(<span class="number">2.0</span>, <span class="number">2.0</span>), <span class="string">"r2"</span>)))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> schema = <span class="type">StructType</span>(<span class="type">List</span>(</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"id"</span>, <span class="type">IntegerType</span>),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"IntegerCol"</span>, <span class="type">IntegerType</span>),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"LongCol"</span>, <span class="type">LongType</span>),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"FloatCol"</span>, <span class="type">FloatType</span>),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"DoubleCol"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"VectorCol"</span>, <span class="type">ArrayType</span>(<span class="type">DoubleType</span>, <span class="literal">true</span>)),</span><br><span class="line">      <span class="type">StructField</span>(<span class="string">"StringCol"</span>, <span class="type">StringType</span>)))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> rdd = spark.sparkContext.parallelize(testRows)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Save DataFrame as TFRecords</span></span><br><span class="line">    <span class="keyword">val</span> df: <span class="type">DataFrame</span> = spark.createDataFrame(rdd, schema)</span><br><span class="line">    df.write.format(<span class="string">"tfrecords"</span>).option(<span class="string">"recordType"</span>, <span class="string">"SequenceExample"</span>).save(path)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Read TFRecords into DataFrame.</span></span><br><span class="line">    <span class="comment">//The DataFrame schema is inferred from the TFRecords if no custom schema is provided.</span></span><br><span class="line">    <span class="keyword">val</span> importedDf1: <span class="type">DataFrame</span> = spark.read.format(<span class="string">"tfrecords"</span>).option(<span class="string">"recordType"</span>, <span class="string">"SequenceExample"</span>).load(path)</span><br><span class="line">    importedDf1.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Read TFRecords into DataFrame using custom schema</span></span><br><span class="line">    <span class="keyword">val</span> importedDf2: <span class="type">DataFrame</span> = spark.read.format(<span class="string">"tfrecords"</span>).schema(schema).load(path)</span><br><span class="line">    importedDf2.show()</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pom文件：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xxx.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tfrecordsProj<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.tensorflow<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-tensorflow-connector_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.10.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-sql_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.scala-lang<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>scala-library<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.scala-lang<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>scala-compiler<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.12.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.scala-lang<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>scala-reflect<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.scala-lang.modules<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>scala-xml_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.scala-lang.modules<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>scala-parser-combinators_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>官方给出的python example<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">spark =  SparkSession.builder.master(<span class="string">"local[4]"</span>).appName(<span class="string">"tfrecords_examples"</span>).getOrCreate()</span><br><span class="line">path = <span class="string">'/Users/linglingsu/Documents/intellij_workspace/tfrecordsProj/file/test-output.tfrecord'</span></span><br><span class="line">fields = [StructField(<span class="string">"id"</span>, IntegerType()), StructField(<span class="string">"IntegerCol"</span>, IntegerType()),</span><br><span class="line">          StructField(<span class="string">"LongCol"</span>, LongType()), StructField(<span class="string">"FloatCol"</span>, FloatType()),</span><br><span class="line">          StructField(<span class="string">"DoubleCol"</span>, DoubleType()), StructField(<span class="string">"VectorCol"</span>, ArrayType(DoubleType(), <span class="literal">True</span>)),</span><br><span class="line">          StructField(<span class="string">"StringCol"</span>, StringType())]</span><br><span class="line">schema = StructType(fields)</span><br><span class="line">df = spark.read.format(<span class="string">"tfrecords"</span>).option(<span class="string">"recordType"</span>, <span class="string">"SequenceExample"</span>).load(path)</span><br><span class="line">df_pandas = df.toPandas()</span><br><span class="line">print(df_pandas.head())</span><br></pre></td></tr></table></figure></p>
+<p>运行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pyspark-submit --jars xxx/ecosystem/spark/spark-tensorflow-connector/target/spark-tensorflow-connector_2.11-1.10.0.jar test.py</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/19/推荐系统-找相似/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2605,7 +2794,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2692,7 +2881,7 @@ $\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">13.2k</span>
+    <span title="Site words total count">14.1k</span>
   
 </div>
 
