@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="session-based,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="数据挖掘日常笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Session-Based Recommendations With Recurrent Neural Networks这篇是2016 ICLR的一篇文章，考虑到现实生活中更多的推荐场景是基于短期session而不是长期的用户历史，因此如MF等方法就不是很准确，因此本文提出将RNN应用于基于session的推荐系统。 模型 输入对应session内的点击序列，采用one-hot编码，输出为预测的i">
+<meta name="keywords" content="session-based">
+<meta property="og:type" content="article">
+<meta property="og:title" content="序列推荐">
+<meta property="og:url" content="http://yoursite.com/2019/10/25/序列推荐/index.html">
+<meta property="og:site_name" content="数据挖掘日常笔记">
+<meta property="og:description" content="Session-Based Recommendations With Recurrent Neural Networks这篇是2016 ICLR的一篇文章，考虑到现实生活中更多的推荐场景是基于短期session而不是长期的用户历史，因此如MF等方法就不是很准确，因此本文提出将RNN应用于基于session的推荐系统。 模型 输入对应session内的点击序列，采用one-hot编码，输出为预测的i">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/3.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/4.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/5.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/序列推荐/6.jpg">
+<meta property="og:updated_time" content="2019-10-29T02:17:55.411Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="序列推荐">
+<meta name="twitter:description" content="Session-Based Recommendations With Recurrent Neural Networks这篇是2016 ICLR的一篇文章，考虑到现实生活中更多的推荐场景是基于短期session而不是长期的用户历史，因此如MF等方法就不是很准确，因此本文提出将RNN应用于基于session的推荐系统。 模型 输入对应session内的点击序列，采用one-hot编码，输出为预测的i">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/25/序列推荐/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/25/序列推荐/">
+
+
+
+
+
+  <title>序列推荐 | 数据挖掘日常笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据挖掘日常笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Zoe的博客 | Zoe Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/序列推荐/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">序列推荐</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-25T10:35:27+08:00">
+                2019-10-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-29T10:17:55+08:00">
+                2019-10-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Session-Based-Recommendations-With-Recurrent-Neural-Networks"><a href="#Session-Based-Recommendations-With-Recurrent-Neural-Networks" class="headerlink" title="Session-Based Recommendations With Recurrent Neural Networks"></a>Session-Based Recommendations With Recurrent Neural Networks</h1><p>这篇是2016 ICLR的一篇文章，考虑到现实生活中更多的推荐场景是基于短期session而不是长期的用户历史，因此如MF等方法就不是很准确，因此本文提出将RNN应用于基于session的推荐系统。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2019/10/25/序列推荐/1.jpg" alt="1"></p>
+<p>输入对应session内的点击序列，采用one-hot编码，输出为预测的item被点击的概率。为适应推荐任务，作者做了以下几个优化：</p>
+<h3 id="session-parallel-mini-batches"><a href="#session-parallel-mini-batches" class="headerlink" title="session-parallel mini-batches"></a>session-parallel mini-batches</h3><p>由于用户一个session内的行为差别很大，比如有的时候只有两个动作，有的时候会有上百个，而我们希望捕捉的是session内的行为模式，因此不希望通过截断来提高训练效率，因此作者提出来session-parrallel mini-batches，即拼接不同的session减少无效计算，具体如下图所示：<br><img src="/2019/10/25/序列推荐/2.jpg" alt="2"><br>如上图mini-batch3所示，当session2结束后继续接入session4而不是通过padding实现，避免浪费计算。当接入新的session时，需要将对应的隐状态重置。</p>
+<h3 id="smapling-on-the-output"><a href="#smapling-on-the-output" class="headerlink" title="smapling on the output"></a>smapling on the output</h3><p>由于item数量常常是巨大的，对每一个item在每一个step计算一个得分无疑是巨大的计算量，在实际应用中也会变得不可用。因此作者提出对output进行采样，只对采样得到的正样本和一些负样本计算得分。</p>
+<p>对于采样方法，作者采用的是同一个mini-batch中其他sequence的下一个点击的item作为负样本。</p>
+<h3 id="ranking-loss"><a href="#ranking-loss" class="headerlink" title="ranking loss"></a>ranking loss</h3><p>排序可以分为pointwise,pairwise和listwise三种，pointwise ranking的损失函数是对单点预测结果和实际之间对差异。pairwise ranking的损失函数是对pair的预测效果和真实之间的差异。listwise可以通过pairwise实现。本文作者尝试了pointwise和pairwise的损失，发现基于pointwise的loss训练出的模型不稳定，因此采用了pairwise的损失。具体包含以下两种：</p>
+<ul>
+<li><p>BPR(Bayesian Personalized Ranking) 一种矩阵分解的方法</p>
+<p>$L_{s} = -\frac{1}{N_{S}} \cdot \sum_{j=1}^{N_{S}} \log \left(\sigma\left(\hat{r}_{s, i}-\hat{r}_{s, j}\right)\right)$</p>
+<p>其中$N_{S}$为采样大小，$\hat{r}_{s, k}$为给定session下item k的得分。</p>
+</li>
+<li><p>TOP1 一种正则估计</p>
+<p>$L_{s}=\frac{1}{N_{S}} \cdot \sum_{j=1}^{N_{S}} \sigma\left(\hat{r}_{s, j}-\hat{r}_{s, i}\right)+\sigma\left(\hat{r}_{s, j}^{2}\right)$</p>
+</li>
+</ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>文章主要贡献就是将RNN应用于推荐领域（虽然现在看没有什么新意），更具有参考意义的是作者提到的训练上优化的点。</p>
+<h1 id="Parallel-Recurrent-Neural-Network-Architectures-for-Feature-rich-Session-based-Recommendations"><a href="#Parallel-Recurrent-Neural-Network-Architectures-for-Feature-rich-Session-based-Recommendations" class="headerlink" title="Parallel Recurrent Neural Network Architectures for Feature-rich Session-based Recommendations"></a>Parallel Recurrent Neural Network Architectures for Feature-rich Session-based Recommendations</h1><p>这是发表于RecSys‘16的一篇文章，主要提出结合item信息的基于session的RNN架构。</p>
+<h2 id="模型-1"><a href="#模型-1" class="headerlink" title="模型"></a>模型</h2><p><img src="/2019/10/25/序列推荐/3.jpg" alt="3"></p>
+<p>文章所提出的模型架构如上图所示，主要包括以下几个架构：</p>
+<ul>
+<li>Baseline architectures：<ul>
+<li>ID only是指只用session 中click item的ID经one-hot作为输入的RNN模型（就是第一篇paper中的模型）。</li>
+<li>feature only是指只用item的image feature作为输入的模型（用item文本信息也是一样的道理）。</li>
+<li>Concatenated input是将ID 和image feature concat作为输入送入模型，这也是大家都能想到的结合item feature的方法了。</li>
+</ul>
+</li>
+<li>p-RNN architectures:<ul>
+<li>Parallel 是将ID和image feature分别送入RNN，隐藏层concat之后做预测。</li>
+<li>Parallel Shared-W 与parallel区别的是共享一个用于计算输出的权重矩阵，整个架构类似来自上下文感知因子分解的pariwise的模型。</li>
+<li>Parallel interaction model 这个架构中 image feature的隐状态会和ID 的隐状态做逐元素相乘后再计算推荐结果（类似上下文感知偏好建模），其中计算输出的权重矩阵不共享。</li>
+</ul>
+</li>
+</ul>
+<p>模型用到的损失函数是上文提到的TOP1损失。</p>
+<h3 id="p-RNNs训练"><a href="#p-RNNs训练" class="headerlink" title="p-RNNs训练"></a>p-RNNs训练</h3><p>对于p-RNNs的训练，作者提出了以下几个策略：</p>
+<ul>
+<li>Simultaneous: 所有的子图同时训练</li>
+<li>Alternating： 交替训练，如第一个epoch训练ID的子图，第二个epoch训练feature的子图，交替往复直到训练结束。</li>
+<li>Residual： 子图一个接一个的训练，当ID子图训练完成后，feature的子图基于残差继续训练。</li>
+<li>Inrerleaving： 每个mini-batch交替训练。</li>
+</ul>
+<p>论文实验结果表示Parallel并行更新item ID和feature的模型效果最好，Parallel Shared-W和Parallel interaction model效果没有很好可能是重复的序列信息加重了模型训练的负担。</p>
+<h2 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a>总结：</h2><p>本文主要是提出了几种结合item feature的架构，虽然最终实验结果表明Parallel具有最好的结果，但是面对实际业务其他的架构及训练策略还是具有一定借鉴意义的。</p>
+<h1 id="Incorporating-Dwell-Time-in-Session-Based-Recommendations-with-Recurrent-Neural-Networks"><a href="#Incorporating-Dwell-Time-in-Session-Based-Recommendations-with-Recurrent-Neural-Networks" class="headerlink" title="Incorporating Dwell Time in Session-Based Recommendations with Recurrent Neural Networks"></a>Incorporating Dwell Time in Session-Based Recommendations with Recurrent Neural Networks</h1><p>本文是RecSys‘17的一篇文章，主要提出将item停留时长考虑进去基于session 的RNN建模。</p>
+<h2 id="模型-2"><a href="#模型-2" class="headerlink" title="模型"></a>模型</h2><p>模型架构与<a href="https://arxiv.org/pdf/1511.06939.pdf" target="_blank" rel="noopener">第一篇paper</a>中的架构完全一样，只是在session的构建上，如下图所示：<br><img src="/2019/10/25/序列推荐/4.jpg" alt="4"></p>
+<p>作者认为，用户停留的时间越长表明越感兴趣，将用户在每个item上的停留时间按照单位时间t进行划分，得到如上图中的session。考虑到用户停留时长的session划分能够起到item boosting的效果。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章短小而精悍，相比于第一篇paper只是考虑到用户时长将session进行划分的不同就可以得到非常大的提升。看到题目标题时，笔者也只是在考虑是将用户停留时长做feature一起送入模型，没想到是采用这样的方式，只是很奇妙的。</p>
+<h1 id="Personalizing-Session-based-Recommendations-with-Hierarchical-Recurrent-Neural-Networks"><a href="#Personalizing-Session-based-Recommendations-with-Hierarchical-Recurrent-Neural-Networks" class="headerlink" title="Personalizing Session-based Recommendations with Hierarchical Recurrent Neural Networks"></a>Personalizing Session-based Recommendations with Hierarchical Recurrent Neural Networks</h1><p>这也是RecSys‘17的一篇文章，主要提出层级RNN结构能够捕获session内信息和跨session的信息（如用户兴趣的变迁等）从而做用户的个性化推荐。</p>
+<h2 id="模型-3"><a href="#模型-3" class="headerlink" title="模型"></a>模型</h2><p><img src="/2019/10/25/序列推荐/5.jpg" alt="5"></p>
+<p>上图为本文提出的HRNN架构图，红框对应session-level GRU，蓝框对应user-level GRU。 session-level GRU输入为session内item ID的one-hot编码，输出为预测的item的score。训练时损失可以采用cross-entrop，BRP或TOP1.</p>
+<p>对于一个用户多session时，当一个session结束时，用session-level GRU的输出来计算当前user-level GRU的表示：<br>$c_{m}=G R U_{u s r}\left(s_{m}, c_{m-1}\right), m=1, \ldots, M_{u}$，</p>
+<p>user-levelGRU的表示来初始化下一个session的输入：$s_{m+1,0}=\tanh \left(W_{i n i t} c_{m}+b_{i n i t}\right)$</p>
+<p>随着迭代，$s_{m+1, n}=G R U_{s e s}\left(i_{m+1, n}, s_{m+1, n-1}\left[, c_{m}\right]\right), n=1, \ldots, N_{m+1}-1      \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ …（1）$</p>
+<p>训练是端到端进行的，user-level GRU只有在session结束时才更新。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>本文提供了一种可以综合跨session信息的策略，从而可以捕捉到诸如用户兴趣变迁等信息。</p>
+<h1 id="When-Recurrent-Neural-Networks-meet-the-Neighborhood-for-Session-Based-Recommendation"><a href="#When-Recurrent-Neural-Networks-meet-the-Neighborhood-for-Session-Based-Recommendation" class="headerlink" title="When Recurrent Neural Networks meet the Neighborhood for Session-Based Recommendation"></a>When Recurrent Neural Networks meet the Neighborhood for Session-Based Recommendation</h1><p>这也是RecSys‘17的一篇文章，本文主要在基于session-bases rnn model的基础上，结合了KNN，实验结果显示对推荐结果有了进一步对提升。</p>
+<h2 id="模型-4"><a href="#模型-4" class="headerlink" title="模型"></a>模型</h2><p>如果一个item在和当前item相似的session中出现过，则这个item出现的可能性更大，基于这种考虑，作者提出了基于session-based KNN。</p>
+<h3 id="GRU4REC"><a href="#GRU4REC" class="headerlink" title="GRU4REC"></a>GRU4REC</h3><p>与论文1中提出的session-based RNN一致</p>
+<h3 id="Session-based-KNN"><a href="#Session-based-KNN" class="headerlink" title="Session-based KNN"></a>Session-based KNN</h3><p> 根据当前session找到最相近的K个历史session，item i在当前session出现的概率为：</p>
+<p>$score_{KNN} ( i , s )=\Sigma_{n \in N_{s}} \operatorname{sim}(s, n) \times 1_{n}(i)$</p>
+<p>其中sim(s,n)可以是各种衡量相似度的公式（作者实验得cosine取得最好的结果），$1_{n}(i)=1$指当session n中包含item i为1，否则为0.</p>
+<h3 id="Hybird-Approach"><a href="#Hybird-Approach" class="headerlink" title="Hybird Approach"></a>Hybird Approach</h3><p>两个方法综合的方式有switching，cascading和weighted hybirds。作者实验结果表明weighted hybirds方式可以取得最好的结果。</p>
+<h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p>本文提出了一种基于session-based KNN模型，KNN更多的是关注近期数据表现，RNN相对可以捕获更长的序列，混合模型对结果还是会有提升。</p>
+<h1 id="Improved-Recurrent-Neural-Networks-for-Session-based-Recommendations"><a href="#Improved-Recurrent-Neural-Networks-for-Session-based-Recommendations" class="headerlink" title="Improved Recurrent Neural Networks for Session-based Recommendations"></a>Improved Recurrent Neural Networks for Session-based Recommendations</h1><p>DLRS’16的一篇文章，在GRU4REC（paper1 介绍的session-based RNN）基础上提出的两条提升模型效果的方法，并且提出了一个generalised distillation framework来替代原有模型。</p>
+<h2 id="提升模型效果的方法"><a href="#提升模型效果的方法" class="headerlink" title="提升模型效果的方法"></a>提升模型效果的方法</h2><p>GRU4REC是对$\mathbf{x}=\left[x_{1}, x_{2}, \ldots, x_{r-1}, x_{r}\right]$这样的session序列做预测，本质是一个分类模型。由于session内数据变化很大，而我们的任务是作出对任意长度都适用的模型。</p>
+<h3 id="Data-Augument"><a href="#Data-Augument" class="headerlink" title="Data Augument"></a>Data Augument</h3><p>给定一个session的输入序列$\mathbf{x}$，可以产生出多条训练数据如$\left(\left[x_{1}\right], V\left(x_{2}\right)\right),\left(\left[x_{1}, x_{2}\right], V\left(x_{3}\right)\right), \ldots\left(\left[x_{1}, x_{2}, \ldots, x_{n-1}\right], V\left(x_{n}\right)\right)$，同时用户能存在误点击的操作，因此可以引入dropout的方式来做泛化。总体结果如下图所示：<br><img src="/2019/10/25/序列推荐/6.jpg" alt="6"></p>
+<h3 id="Adapting-to-temporal-changes"><a href="#Adapting-to-temporal-changes" class="headerlink" title="Adapting to temporal changes"></a>Adapting to temporal changes</h3><p>机器学习算法的一个基本假设是数据独立同分布的，对于推荐的数据，显然并不是严格成立的：当item被显示时用户才有可能点击，并且用户的行为是随时时间变化的。推荐的任务是根据用户当前的行为预测下一个点击的item，因此应该更关注的是当前的行为序列而不是更早之前的行为。而训练通常会采用全历史行为记录去做模型，因此可能引入偏差。</p>
+<p>为缓解上述问题，可以简单的设置一个空间上的门限，大概门限值的记录就可以舍弃。另一种是采用预训练的方法，首先用全量数据做训练，之后再用近期的数据做fine-tune。</p>
+<h3 id="Use-of-privileged-information"><a href="#Use-of-privileged-information" class="headerlink" title="Use of privileged information"></a>Use of privileged information</h3><p>这部分对应作者提出的generalised distillation framework。给定的序列$x_{1},x_{2}\ldots x_{r-1}$预测$x_{r}$，作者称$x_{r+1},\ldots x_{n}$为privileged information，其对应的privileged sequence 为$x^{<em>}=\left[x_{n}, x_{n-1} \ldots x_{r+2}\right]$。其中n为原始序列的总长度。首先可以以privileged sequence训练teacher model，然后再tune student model，其loss function为：<br>$(1-\lambda) </em> L\left(M(\mathbf{x}), V\left(x_{n}\right)\right)+\lambda <em> L\left(M(\mathbf{x}), M^{</em>}\left(\mathbf{x}^{<em>}\right)\right)$。其中$\lambda \in[0,1]，$M对应student model，$M^{</em>}$为teacher model。</p>
+<h3 id="Output-embeddings-for-faster-predictions"><a href="#Output-embeddings-for-faster-predictions" class="headerlink" title="Output embeddings for faster predictions"></a>Output embeddings for faster predictions</h3><p>作者提出可以对item embedding向量做预测，使测试结果更具有泛化意义。loss function此时可以定义为embedding的cosine相似度。此时计算量也可以下降： 从原始的H<em>N变为H</em>D，H为hidden layer nums，N为item个数，D为item的embedding size。</p>
+<h2 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h2><p>作者提出了2中策略提升原GRU4REC的效果，另外提出了generalised distillation framework来训练一个新的模型，同时将item预测的任务变为预测item embedding。对于直接对item embedding的预测，作者最后也提到，需要优质的item embedding源做label，虽然可以重用上述模型的产出，但是此时的效果又会如何呢？</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li><a href="https://arxiv.org/pdf/1511.06939.pdf" target="_blank" rel="noopener">SESSION-BASED RECOMMENDATIONS WITH RECURRENT NEURAL NETWORKS</a></li>
+<li><a href="https://alexiskz.files.wordpress.com/2016/06/feature-rnn-paper1.pdf" target="_blank" rel="noopener">Parallel Recurrent Neural Network Architectures for Feature-rich Session-based Recommendations</a></li>
+<li><a href="http://ceur-ws.org/Vol-1922/paper11.pdf" target="_blank" rel="noopener">Incorporating Dwell Time in Session-Based Recommendations with Recurrent Neural Networks</a></li>
+<li><a href="https://arxiv.org/pdf/1706.04148.pdf" target="_blank" rel="noopener">Personalizing Session-based Recommendations with<br>Hierarchical Recurrent Neural Networks</a></li>
+<li><a href="https://web-ainf.aau.at/pub/jannach/files/Conference_RecSys_2017.pdf" target="_blank" rel="noopener">When Recurrent Neural Networks meet the Neighborhood for<br>Session-Based Recommendation</a></li>
+<li><a href="https://arxiv.org/pdf/1606.08117.pdf" target="_blank" rel="noopener">Improved Recurrent Neural Networks for Session-based Recommendations</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Zoe
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/10/25/序列推荐/" title="序列推荐">http://yoursite.com/2019/10/25/序列推荐/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/session-based/" rel="tag"># session-based</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/24/spark-with-tfrecords/" rel="next" title="spark_with_tfrecords">
+                <i class="fa fa-chevron-left"></i> spark_with_tfrecords
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/29/序列推荐综述/" rel="prev" title="序列推荐综述">
+                序列推荐综述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Zoe">
+            
+              <p class="site-author-name" itemprop="name">Zoe</p>
+              <p class="site-description motion-element" itemprop="description">Every failure is leading towards success.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Session-Based-Recommendations-With-Recurrent-Neural-Networks"><span class="nav-number">1.</span> <span class="nav-text">Session-Based Recommendations With Recurrent Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#session-parallel-mini-batches"><span class="nav-number">1.1.1.</span> <span class="nav-text">session-parallel mini-batches</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smapling-on-the-output"><span class="nav-number">1.1.2.</span> <span class="nav-text">smapling on the output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ranking-loss"><span class="nav-number">1.1.3.</span> <span class="nav-text">ranking loss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">1.2.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parallel-Recurrent-Neural-Network-Architectures-for-Feature-rich-Session-based-Recommendations"><span class="nav-number">2.</span> <span class="nav-text">Parallel Recurrent Neural Network Architectures for Feature-rich Session-based Recommendations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型-1"><span class="nav-number">2.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#p-RNNs训练"><span class="nav-number">2.1.1.</span> <span class="nav-text">p-RNNs训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结：-1"><span class="nav-number">2.2.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Incorporating-Dwell-Time-in-Session-Based-Recommendations-with-Recurrent-Neural-Networks"><span class="nav-number">3.</span> <span class="nav-text">Incorporating Dwell Time in Session-Based Recommendations with Recurrent Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型-2"><span class="nav-number">3.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Personalizing-Session-based-Recommendations-with-Hierarchical-Recurrent-Neural-Networks"><span class="nav-number">4.</span> <span class="nav-text">Personalizing Session-based Recommendations with Hierarchical Recurrent Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型-3"><span class="nav-number">4.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">4.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#When-Recurrent-Neural-Networks-meet-the-Neighborhood-for-Session-Based-Recommendation"><span class="nav-number">5.</span> <span class="nav-text">When Recurrent Neural Networks meet the Neighborhood for Session-Based Recommendation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型-4"><span class="nav-number">5.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GRU4REC"><span class="nav-number">5.1.1.</span> <span class="nav-text">GRU4REC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-based-KNN"><span class="nav-number">5.1.2.</span> <span class="nav-text">Session-based KNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hybird-Approach"><span class="nav-number">5.1.3.</span> <span class="nav-text">Hybird Approach</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-2"><span class="nav-number">5.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Improved-Recurrent-Neural-Networks-for-Session-based-Recommendations"><span class="nav-number">6.</span> <span class="nav-text">Improved Recurrent Neural Networks for Session-based Recommendations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提升模型效果的方法"><span class="nav-number">6.1.</span> <span class="nav-text">提升模型效果的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Augument"><span class="nav-number">6.1.1.</span> <span class="nav-text">Data Augument</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapting-to-temporal-changes"><span class="nav-number">6.1.2.</span> <span class="nav-text">Adapting to temporal changes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Use-of-privileged-information"><span class="nav-number">6.1.3.</span> <span class="nav-text">Use of privileged information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Output-embeddings-for-faster-predictions"><span class="nav-number">6.1.4.</span> <span class="nav-text">Output embeddings for faster predictions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-3"><span class="nav-number">6.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">7.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zoe</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">19.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

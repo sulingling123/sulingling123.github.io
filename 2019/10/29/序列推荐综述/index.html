@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="session-based,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="数据挖掘日常笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="A Survey on Session-based Recommender Systems本文是ACM’18关于session-based recommender systems(SBRS)的综述，文章对SBRS的推荐范式进行了说明，从理论和实践上证明了SBRS的价值；对当前对SBRS进行了系统分类，并从技术及研究的角度对其进行说明；最后总述了SBRS目前的进展及其复杂性和挑战。 推荐系统分类">
+<meta name="keywords" content="session-based">
+<meta property="og:type" content="article">
+<meta property="og:title" content="序列推荐综述">
+<meta property="og:url" content="http://yoursite.com/2019/10/29/序列推荐综述/index.html">
+<meta property="og:site_name" content="数据挖掘日常笔记">
+<meta property="og:description" content="A Survey on Session-based Recommender Systems本文是ACM’18关于session-based recommender systems(SBRS)的综述，文章对SBRS的推荐范式进行了说明，从理论和实践上证明了SBRS的价值；对当前对SBRS进行了系统分类，并从技术及研究的角度对其进行说明；最后总述了SBRS目前的进展及其复杂性和挑战。 推荐系统分类">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/29/序列推荐综述/1.jpg">
+<meta property="og:updated_time" content="2019-10-31T03:27:18.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="序列推荐综述">
+<meta name="twitter:description" content="A Survey on Session-based Recommender Systems本文是ACM’18关于session-based recommender systems(SBRS)的综述，文章对SBRS的推荐范式进行了说明，从理论和实践上证明了SBRS的价值；对当前对SBRS进行了系统分类，并从技术及研究的角度对其进行说明；最后总述了SBRS目前的进展及其复杂性和挑战。 推荐系统分类">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/29/序列推荐综述/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/29/序列推荐综述/">
+
+
+
+
+
+  <title>序列推荐综述 | 数据挖掘日常笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据挖掘日常笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Zoe的博客 | Zoe Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/序列推荐综述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">序列推荐综述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-29T15:05:32+08:00">
+                2019-10-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-31T11:27:18+08:00">
+                2019-10-31
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="A-Survey-on-Session-based-Recommender-Systems"><a href="#A-Survey-on-Session-based-Recommender-Systems" class="headerlink" title="A Survey on Session-based Recommender Systems"></a>A Survey on Session-based Recommender Systems</h1><p>本文是ACM’18关于session-based recommender systems(SBRS)的综述，文章对SBRS的推荐范式进行了说明，从理论和实践上证明了SBRS的价值；对当前对SBRS进行了系统分类，并从技术及研究的角度对其进行说明；最后总述了SBRS目前的进展及其复杂性和挑战。</p>
+<h2 id="推荐系统分类"><a href="#推荐系统分类" class="headerlink" title="推荐系统分类"></a>推荐系统分类</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>推荐系统</th>
+<th>输入</th>
+<th>核心假设</th>
+<th>工作机制</th>
+<th>优势</th>
+<th>劣势  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基于内容</td>
+<td>user和item content</td>
+<td>根据用户的 喜好做推荐</td>
+<td>根据item content建模</td>
+<td>简单直接 可以解决用户的冷启动</td>
+<td>用户兴趣会变化，跟现实场景会有出入</td>
+</tr>
+<tr>
+<td>协同过滤（CF）</td>
+<td>User-item交互数据</td>
+<td>根据用户喜好</td>
+<td>User-item交互数据建模</td>
+<td>有效且相对简单</td>
+<td>容易陷入数据稀疏带来的问题， 冷启动问题</td>
+</tr>
+<tr>
+<td>上下文可感知的RS</td>
+<td>User， item， 上下文，user-item交互数据</td>
+<td>用户在不同上下文环境下有不同的喜好</td>
+<td>对User-item 上下文 交互信息进行建模</td>
+<td>User-item交互数据建模</td>
+<td>可用数据及数据稀疏的问题</td>
+</tr>
+<tr>
+<td>SBRS</td>
+<td>Session的数据</td>
+<td>用户的喜好随着session的变化而变化</td>
+<td>推荐出现在相似的session环境中的items</td>
+<td>考虑到用户喜好的变化，更好的符合现实场景</td>
+<td>会忽略用户长期的更general的喜好</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="SBRS相关定义及符号表示"><a href="#SBRS相关定义及符号表示" class="headerlink" title="SBRS相关定义及符号表示"></a>SBRS相关定义及符号表示</h2><p>定义如下符号表示： </p>
+<p>用户：u</p>
+<p>用户集合： $U=\left\{u_{1}, u_{2}, \ldots, u_{|U|}\right\}$</p>
+<p>物品： i</p>
+<p>物品集合：$I=\left\{i_{1}, i_{2}, \ldots, i_{|I|}\right\}$</p>
+<p>session： $s=\left\{i_{1}, i_{2}, \ldots, i_{|s|}\right\}$</p>
+<p>session集合： $S=\left\{s_{1}, s_{2}, \dots, s_{|S|}\right\}$</p>
+<p>待预测/推荐物品为： t</p>
+<p>Intra-session context： $C^{I a}$</p>
+<p>Inter-seesion context： $C^{I e}$</p>
+<p>session的定义： 一段时间内用户消费/收集的一系列事件内的item集合</p>
+<p>SBRS定义： SBRS的任务是给定session的部分信息对未知/未来的信息进行预测。</p>
+<p>Intra-session context定义: $s_{n}$为当前待推荐session，则$C^{I a}=\left\{i | i \in s_{n}, i \neq i_{t}\right\}$</p>
+<p>Inter-session context定义： $s_{n}$为当前待推荐session，$C^{I e}=\left\{s_{n-1}, s_{n-2}, \dots, s_{\left|c^{I e}\right|}\right\}$</p>
+<p>session-based recommendation task定义： 给定一个session语境C，session-based recommendation是学习一个从C到t的函数f使得$t: t \Leftarrow f(C)$。在SBRS中，session context是首要的信息，其他如用户或item信息也可以添加到模型中。</p>
+<p>Next-items recommendation： 给定当前session $s_{n}$和intra-session context$C^{Ia}$预测$i_{t}$</p>
+<p>Next-sessopm(next-basket) recommendations: 给定当前session$s_{n}$和inter-session context $C^{Ie}$预测下一个session的items。</p>
+<h2 id="SBRS的意义，复杂性和挑战"><a href="#SBRS的意义，复杂性和挑战" class="headerlink" title="SBRS的意义，复杂性和挑战"></a>SBRS的意义，复杂性和挑战</h2><ul>
+<li>意义和价值： SBRS在学术和商业上都具有重要意义。</li>
+<li><p>复杂性：</p>
+<ul>
+<li><p>数据的复杂性</p>
+<p>如下图所示，数据可以分为如下五个等级，SBRS需要的是中间核心的三个（item feature level， item level 和session level）。<br><img src="/2019/10/29/序列推荐综述/1.jpg" alt="1"></p>
+</li>
+</ul>
+</li>
+<li><p>挑战： 上图右侧描述了每层的一些挑战，按照层级可以分为 Inner-session，Inter-session， Outer-session的挑战。也可以按照类别分为异质性，共生性，复杂性和相互作用四大类。</p>
+</li>
+</ul>
+<h2 id="Overview-of-SBRS"><a href="#Overview-of-SBRS" class="headerlink" title="Overview of SBRS"></a>Overview of SBRS</h2><p>SBRS的发展可以分为两阶段： 1990s到2010s的model-free阶段，主要依赖pattern或规则去做。第二阶段是从2010s到现在的model-based阶段，主要采用统计和机器学习算法来做，包括时序相关的马尔可夫链，rnn等。</p>
+<h2 id="SBRS的分类和总结"><a href="#SBRS的分类和总结" class="headerlink" title="SBRS的分类和总结"></a>SBRS的分类和总结</h2><h3 id="从研究问题的角度做分类"><a href="#从研究问题的角度做分类" class="headerlink" title="从研究问题的角度做分类"></a>从研究问题的角度做分类</h3><ul>
+<li><p>按照推荐什么做分类：</p>
+<ul>
+<li>Next-item: 有明显session划分的预测下一个<ul>
+<li><a href="http://ceur-ws.org/Vol-1922/paper11.pdf" target="_blank" rel="noopener">Incorporating dwell time in session-based recommendations with recurrent Neural networks </a>  2017</li>
+<li><a href="https://arxiv.org/pdf/1706.04026.pdf" target="_blank" rel="noopener"> Recurrent Latent Variable Networks for Session-Based<br>Recommendation </a> 2017</li>
+<li><a href="https://pdfs.semanticscholar.org/9f97/6eea4bd54141dfaf13d2f0fddd4fff48e73b.pdf" target="_blank" rel="noopener">A Variational Recurrent Neural Network for Session-Based<br>Recommendations using Bayesian Personalized Ranking</a>2017</li>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.95.3821&amp;rep=rep1&amp;type=pdf" target="_blank" rel="noopener">Web path recommendations based on page ranking and<br>markov models</a> 2005</li>
+<li><a href="http://ceit.aut.ac.ir/~meybodi/paper/paper/Forsati-2009-Conference%20on%20Electronic%20Computer%20Conference%20(ICECT%202009),%20Macao,WeightedRule.pdf" target="_blank" rel="noopener">Web page personalization based on weighted association rules</a> 2009</li>
+<li><a href="https://www.researchgate.net/publication/314506392_Session-Based_Recommendations_Using_Item_Embedding" target="_blank" rel="noopener">Session-based recommendations using item embedding</a> 2017</li>
+<li><a href="https://arxiv.org/pdf/1706.03847.pdf" target="_blank" rel="noopener">Recurrent Neural Networks with Top-k Gains for Session-based Recommendations</a> 2017</li>
+<li><a href="https://arxiv.org/pdf/1511.06939.pdf" target="_blank" rel="noopener">Session-based recommendations with recurrent<br>neural networks</a> 2015</li>
+<li><a href="https://alexiskz.files.wordpress.com/2016/06/feature-rnn-paper1.pdf" target="_blank" rel="noopener"> Parallel recurrent neural network architectures<br>for feature-rich session-based recommendations</a> 2016</li>
+<li><a href="https://www.ijcai.org/proceedings/2017/0258.pdf" target="_blank" rel="noopener">Diversifying personalized recommendation<br>with user-session context</a> 2017</li>
+<li><a href="https://dl.acm.org/citation.cfm?id=3109872" target="_blank" rel="noopener">When recurrent neural networks meet the neighborhood for session-based recommendation</a> 2017</li>
+<li><a href="https://www.researchgate.net/publication/319582690_Session-based_item_recommendation_in_e-commerce_on_short-term_intents_reminders_trends_and_discounts" target="_blank" rel="noopener"> Session-based item recommendation in e-commerce: on short-term intents,reminders, trends and discounts</a> 2017</li>
+<li><a href="http://www.cs.toronto.edu/~lcharlin/papers/cofactorization.pdf" target="_blank" rel="noopener">Factorization meets the item embedding: Regularizing matrix<br>factorization with item co-occurrence</a> 2016</li>
+<li><a href="https://arxiv.org/pdf/1709.01532.pdf" target="_blank" rel="noopener">Interacting Attention-gated Recurrent Networks<br>for Recommendation</a>2017</li>
+<li><a href="https://arxiv.org/pdf/1706.04148.pdf" target="_blank" rel="noopener">Personalizing Session-based Recommendations<br>with Hierarchical Recurrent Neural Networks</a> 2017</li>
+<li><a href="https://arxiv.org/pdf/1706.07506.pdf" target="_blank" rel="noopener">Inter-Session Modeling for Session-Based Recommendation</a> 2017</li>
+<li><a href="https://arxiv.org/pdf/1606.08117.pdf" target="_blank" rel="noopener">Improved recurrent neural networks for session-based recommendations</a>2016</li>
+<li><a href="http://ecmlpkdd2017.ijs.si/papers/paperID293.pdf" target="_blank" rel="noopener">Perceiving the Next Choice with Comprehensive Transaction Embeddings for Online Recommendation</a> 2017</li>
+<li>Attention-based Transactional Context<br>Embedding for Next-Item Recommendation 2018</li>
+<li><a href="https://www.ntu.edu.sg/home/XLLI/publication/DASFAA11_Recommendation.pdf" target="_blank" rel="noopener">Effective next-items recommendation via personalized sequential pattern mining</a> 2012</li>
+<li><a href="https://www.ijcai.org/proceedings/2018/0546.pdf" target="_blank" rel="noopener">Sequential<br>Recommender System based on Hierarchical Attention Networks</a> 2018</li>
+</ul>
+</li>
+<li>Next-basket： 有明显session划分的预测下一个session<ul>
+<li><a href="http://ramb.ethz.ch/CDstore/www2010/www/p811.pdf" target="_blank" rel="noopener">Factorizing personalized markov chains for next-basket<br>recommendation</a> 2010</li>
+<li><a href="http://ceur-ws.org/Vol-1441/recsys2015_poster15.pdf" target="_blank" rel="noopener">Next Basket Recommendation with Neural<br>Networks</a> 2015</li>
+<li><a href="http://www.bigdatalab.ac.cn/~junxu/publications/SIGIR2015_NextBasketRec.pdf" target="_blank" rel="noopener"> Learning hierarchical representation<br>model for nextbasket recommendation</a> 2015</li>
+<li><a href="http://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/A%20Dynamic%20Recurrent%20Model%20for%20Next%20Basket%20Recommendation.pdf" target="_blank" rel="noopener">A dynamic recurrent model for next basket recommendation</a> 2016</li>
+</ul>
+</li>
+<li>Next-event/action： 无明显session划分<ul>
+<li><a href="https://www.ijcai.org/proceedings/2018/0458.pdf" target="_blank" rel="noopener"> Content-Aware Hierarchical Point-of-Interest<br>Embedding Model for Successive POI Recommendation</a> 2018</li>
+<li><a href="https://pdfs.semanticscholar.org/01a0/438352146dea1129121a94fe428d97971547.pdf" target="_blank" rel="noopener">Where You Like to Go Next: Successive Point-of-Interest Recommendation</a> 2013</li>
+<li><a href="http://mac.citi.sinica.edu.tw/~yang/pub/chou16recsys.pdf" target="_blank" rel="noopener">Addressing cold start for next-song recommendation</a> 2016</li>
+<li><a href="https://pdfs.semanticscholar.org/d0ca/f22825647365a86ae4bf8749cfbe48789a8c.pdf" target="_blank" rel="noopener">Personalized Ranking Metric Embedding<br>for Next New POI Recommendation</a> 2015</li>
+<li><a href="http://www2013.w3c.br/companion/p231.pdf" target="_blank" rel="noopener">Collaborative filtering meets next check-in location prediction</a> 2013</li>
+<li><a href="https://dl.acm.org/citation.cfm?id=3210159" target="_blank" rel="noopener"> K-plet Recurrent Neural Networks for Sequential Recommendation</a> 2018</li>
+<li><a href="http://staff.ustc.edu.cn/~cheneh/paper_pdf/2013/sys145-wu.pdf" target="_blank" rel="noopener">Personalized next-song recommendation in<br>online karaokes</a> 2013</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>按照如何推荐做分类：</p>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>进展</th>
+<th>缺点     </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item-level dependency modeling</td>
+<td>patten-based, 马尔可夫链模型， RNN， attention</td>
+<td>item 不平衡（如热门商品），长尾商品</td>
+</tr>
+<tr>
+<td>Session-level dependency modeling</td>
+<td>因子分解机， RNN等</td>
+<td>长期依赖，上下文感知，inter-seesion依赖</td>
+</tr>
+<tr>
+<td>Feature-level dependency modeling</td>
+<td>因子分解机， RNN， CNN</td>
+<td>特征的异构和依赖</td>
+</tr>
+<tr>
+<td>Feature value-level dependency modeling</td>
+<td>目前没有进展</td>
+<td>特征值的异构和依赖，item-feature-value的交互</td>
+</tr>
+<tr>
+<td>Domain-level dependency modeling</td>
+<td>目前没有进展</td>
+<td>Domain间的互补和交互</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="从技术的角度进行分类"><a href="#从技术的角度进行分类" class="headerlink" title="从技术的角度进行分类"></a>从技术的角度进行分类</h3><h4 id="model-free方法"><a href="#model-free方法" class="headerlink" title="model-free方法"></a>model-free方法</h4><p>model-free的方法主要包括：</p>
+<ul>
+<li>基于pattern/规则</li>
+<li>基于序列pattern</li>
+</ul>
+<h3 id="model-based-方法"><a href="#model-based-方法" class="headerlink" title="model-based 方法"></a>model-based 方法</h3><p>model-based 方法包括：</p>
+<ul>
+<li>基于马尔可夫链的推荐，基于转移概率考虑一阶依赖。</li>
+<li>因子分解机，首先将共现矩阵或item-item转移矩阵进行分解，得到item的隐变量，基于隐变量做推荐。</li>
+<li>基于神经网络的方法，如考虑序列的RNN等。</li>
+</ul>
+<h2 id="model-free方法介绍"><a href="#model-free方法介绍" class="headerlink" title="model-free方法介绍"></a>model-free方法介绍</h2><p>基于pattern/规则的推荐系统主要分三阶段：1.最高频的pattern挖掘，session匹配和item推荐。</p>
+<p>常见的基于高频pattern的挖掘有Apriori，FR-Tree及相关变形。<br>基于session pattern的方法和高频pattern 的挖掘相似，但是有一下两个不同点：1.主要考虑inter-seesion的信息而不是intra-session的信息。2.是对序列信息进行挖掘的。</p>
+<h2 id="model-based-方法介绍"><a href="#model-based-方法介绍" class="headerlink" title="model-based 方法介绍"></a>model-based 方法介绍</h2><h3 id="基于马尔可夫链的推荐方法"><a href="#基于马尔可夫链的推荐方法" class="headerlink" title="基于马尔可夫链的推荐方法"></a>基于马尔可夫链的推荐方法</h3><p>马尔可夫链模型可以描述为$\left\{S T, P_{t}, P_{0}\right\}$，其中ST为状态空间，$P_{t}$为状态转移矩阵，$P_{0}$为初始状态概率，一阶状态转移概率为：</p>
+<p>$P_{t}(j, k)=P\left(i_{j} \rightarrow i_{k}\right)=\frac{f r e q\left(i_{j} \rightarrow i_{k}\right)}{\sum_{i_{t} \in I} f r e q\left(i_{j} \rightarrow i_{t}\right)}$</p>
+<p>由上述公式我们可以得到$\{i_{1}\rightarrow i_{2} \rightarrow i_{3}\}$的概率为：<br>$P\left(i_{1} \rightarrow i_{2} \rightarrow i_{3}\right)=P\left(i_{1}\right) <em> P\left(i_{2} | i_{1}\right) </em> P\left(i_{3} | i_{2}\right)$</p>
+<p>通过上述公式我们可以计算给定session 部分序列时某一item的概率从而做推荐。</p>
+<p>除了上述基本的模型外，有其他一些变形，包括结合<a href="https://www.researchgate.net/publication/4309784_Efficient_Hybrid_Web_Recommendations_Based_on_Markov_Clickstream_Models_and_Implicit_Search" target="_blank" rel="noopener">一阶二阶马尔可夫的模型</a>，有结合<a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=4357&amp;context=sis_research" target="_blank" rel="noopener">隐马尔可夫的概率模型</a>，还有结合因子分解做一些工作。</p>
+<h3 id="基于因子分解机的推荐方法"><a href="#基于因子分解机的推荐方法" class="headerlink" title="基于因子分解机的推荐方法"></a>基于因子分解机的推荐方法</h3><p>由上述可知，根据观测数据可以计算转移概率，从而形成转移概率矩阵$A^{u}$，需要注意的是上述转移概率矩阵是某一个用户的，因此所有用户的概率转移矩阵为$\mathfrak{A}^{|U| \times|I| \times|I|}$，最基本的因子分解模型是基于Tucker降维：</p>
+<p>$\hat{\mathscr{H}}=C \times V_{U} \times V_{I_{j}} \times V_{I_{k}}$</p>
+<p>其中C为核张量，$V_{U}$为用户特征矩阵，$V_{I_{j}}$，$V_{I_{k}}$分别为当前item的特征矩阵和下一个item的特征矩阵。</p>
+<h3 id="基于神经网络的推荐方法"><a href="#基于神经网络的推荐方法" class="headerlink" title="基于神经网络的推荐方法"></a>基于神经网络的推荐方法</h3><p>基于神经网络的推荐方法主要分两大类：基于embedding的浅层的神经网络推荐模型和多层的深度神经网络推荐模型。</p>
+<h4 id="浅层神经网络"><a href="#浅层神经网络" class="headerlink" title="浅层神经网络"></a>浅层神经网络</h4><p>主要是受到word2vec的启发，这种方法将item序列理解为句子，item为词，使用同word2vec的方法可以学习得到高维空间中item的表示，从而item embedding的距离可以表示为他们的关系，基于此做推荐。其他的变形包括加入item feature或其他相关feature做embedding，或加入attention机制，都是自然语言中常见的几种方法。</p>
+<h4 id="深层神经网络"><a href="#深层神经网络" class="headerlink" title="深层神经网络"></a>深层神经网络</h4><p>深层神经网络主要从2016年开始，主要包括基于RNN的,基于DNN的和基于CNN的。</p>
+<ul>
+<li><p>基于RNN： 更好得捕捉序列关系</p>
+<p>  最基础的是GRU4REC模型，输入item序列，输出item的概率分布（同最基础的语言模型）。为提升GRU4REC的效果，<a href="https://arxiv.org/pdf/1606.08117.pdf" target="_blank" rel="noopener">Tan</a>提出数据增广和embedding dropout两种策略训练GRU4REC模型，同时提出一个generalised distillation framework；<a href="https://arxiv.org/pdf/1706.04148.pdf" target="_blank" rel="noopener">Quadrana</a>提出层次RNN结构来捕捉跨session 的信息;<a href="https://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/p152-donkers.pdf" target="_blank" rel="noopener">Tim Donkers</a>提出结合用户属性的user-based GRU来产生用户个性化推荐。</p>
+<p>  除了基于GRU4REC的推荐模型，还有基于RNN的一些变形模型，如<a href="http://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/A%20Dynamic%20Recurrent%20Model%20for%20Next%20Basket%20Recommendation.pdf" target="_blank" rel="noopener">Dynamic REcurrent bAsket Model (DREAM)</a>，通过每个时刻的隐状态学习用户变化的表示。</p>
+<p>  其他的一些进展包括：1.RNN结合变分推断解决稀疏数据的不确定性和降低模型规模[2,3]；2.结合更丰富的信息如上下文信息，位置，item feature等来提升模型的效果[4,5,6];3.加入attention机制<a href="https://arxiv.org/pdf/1706.03847.pdf" target="_blank" rel="noopener">7</a>;4.结合传统的FM或KNN等模型</p>
+</li>
+<li><p>基于DNN：常用于当一个session中无序列关系时，如一个购物车中的物品。</p>
+</li>
+<li><p>基于CNN：同样适用于无严格序列关系的session数据，并且具有更强的局部特征的捕捉能力，可以跨区域捕捉RNN常常捕捉不到的联合依赖关系。</p>
+</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li><p><a href="https://arxiv.org/pdf/1902.04864.pdf" target="_blank" rel="noopener">A Survey on Session-based Recommender Systems</a></p>
+</li>
+<li><p><a href="https://arxiv.org/pdf/1706.04026.pdf" target="_blank" rel="noopener">Recurrent Latent Variable Networks for Session-Based<br>Recommendation</a></p>
+</li>
+<li><a href="https://pdfs.semanticscholar.org/9f97/6eea4bd54141dfaf13d2f0fddd4fff48e73b.pdf" target="_blank" rel="noopener">A Variational Recurrent Neural Network for Session-Based<br>Recommendations using Bayesian Personalized Ranking</a></li>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/46488.pdf" target="_blank" rel="noopener">Latent Cross: Making Use of Context in<br>Recurrent Recommender Systems</a></li>
+<li><a href="https://alexiskz.files.wordpress.com/2016/06/feature-rnn-paper1.pdf" target="_blank" rel="noopener">Parallel Recurrent Neural Network Architectures for Feature-rich Session-based Recommendations</a></li>
+<li><a href="http://ceur-ws.org/Vol-1922/paper11.pdf" target="_blank" rel="noopener">Incorporating Dwell Time in Session-Based Recommendations with Recurrent Neural Networks</a></li>
+<li><a href="https://arxiv.org/pdf/1709.01532.pdf" target="_blank" rel="noopener">Interacting Attention-gated Recurrent Networks for Recommendation</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Zoe
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/10/29/序列推荐综述/" title="序列推荐综述">http://yoursite.com/2019/10/29/序列推荐综述/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/session-based/" rel="tag"># session-based</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/25/序列推荐/" rel="next" title="序列推荐">
+                <i class="fa fa-chevron-left"></i> 序列推荐
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Zoe">
+            
+              <p class="site-author-name" itemprop="name">Zoe</p>
+              <p class="site-description motion-element" itemprop="description">Every failure is leading towards success.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-Survey-on-Session-based-Recommender-Systems"><span class="nav-number">1.</span> <span class="nav-text">A Survey on Session-based Recommender Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐系统分类"><span class="nav-number">1.1.</span> <span class="nav-text">推荐系统分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SBRS相关定义及符号表示"><span class="nav-number">1.2.</span> <span class="nav-text">SBRS相关定义及符号表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SBRS的意义，复杂性和挑战"><span class="nav-number">1.3.</span> <span class="nav-text">SBRS的意义，复杂性和挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-of-SBRS"><span class="nav-number">1.4.</span> <span class="nav-text">Overview of SBRS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SBRS的分类和总结"><span class="nav-number">1.5.</span> <span class="nav-text">SBRS的分类和总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从研究问题的角度做分类"><span class="nav-number">1.5.1.</span> <span class="nav-text">从研究问题的角度做分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从技术的角度进行分类"><span class="nav-number">1.5.2.</span> <span class="nav-text">从技术的角度进行分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#model-free方法"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">model-free方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#model-based-方法"><span class="nav-number">1.5.3.</span> <span class="nav-text">model-based 方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#model-free方法介绍"><span class="nav-number">1.6.</span> <span class="nav-text">model-free方法介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#model-based-方法介绍"><span class="nav-number">1.7.</span> <span class="nav-text">model-based 方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于马尔可夫链的推荐方法"><span class="nav-number">1.7.1.</span> <span class="nav-text">基于马尔可夫链的推荐方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于因子分解机的推荐方法"><span class="nav-number">1.7.2.</span> <span class="nav-text">基于因子分解机的推荐方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于神经网络的推荐方法"><span class="nav-number">1.7.3.</span> <span class="nav-text">基于神经网络的推荐方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#浅层神经网络"><span class="nav-number">1.7.3.1.</span> <span class="nav-text">浅层神经网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深层神经网络"><span class="nav-number">1.7.3.2.</span> <span class="nav-text">深层神经网络</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zoe</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">19.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

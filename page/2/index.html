@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="数据挖掘日常笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Every failure is leading towards success.">
+<meta name="keywords" content="深度学习 机器学习 数据挖掘 推荐 DKT ITS">
+<meta property="og:type" content="website">
+<meta property="og:title" content="数据挖掘日常笔记">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="数据挖掘日常笔记">
+<meta property="og:description" content="Every failure is leading towards success.">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据挖掘日常笔记">
+<meta name="twitter:description" content="Every failure is leading towards success.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/page/2/">
+
+
+
+
+
+  <title>数据挖掘日常笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband">
+
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据挖掘日常笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Zoe的博客 | Zoe Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/06/深度知识追踪/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/06/深度知识追踪/" itemprop="url">深度知识追踪</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-06T18:32:00+08:00">
+                2019-08-06
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-13T19:09:17+08:00">
+                2019-08-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">Deeplearning</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/DKT/" itemprop="url" rel="index">
+                    <span itemprop="name">DKT</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/DKT/TCN/" itemprop="url" rel="index">
+                    <span itemprop="name">TCN</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  5.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  21
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="深度知识追踪（Deep-Knowledge-Tracing）"><a href="#深度知识追踪（Deep-Knowledge-Tracing）" class="headerlink" title="深度知识追踪（Deep Knowledge Tracing）"></a>深度知识追踪（Deep Knowledge Tracing）</h1><p>知识追踪是基于学生行为序列进行建模，预测学生对知识的掌握程度。知识追踪是构建自适应教育系统的核心和关键。在自适应的教育系统中，无论是做精准推送，学生学习的路径规划或知识图谱的构建，第一步都是能够精准预测学生对知识的掌握程度。</p>
+<p>知识追踪问题可以描述为： 给定一学生的观测序列 $x_{0},\ldots\ldots,x_{t}$ 预测下次表现$x_{t+1}$，通常$\mathbf { x } _ { t } = \left\{ q _ { t } , a _ { t } \right\}$，其中$q _ { t }$代表回答的问题成分（如对应的知识点），$a _ { t }$代表对应的回答是否正确，通常$a _ { t }=\left\{0,1\right\}$。 下图描述了一个学生在八年级数学中的知识追踪结果可视化展示。<br><img src="/2019/08/06/深度知识追踪/1.png" alt="1"><br>传统的知识追踪是基于一阶马尔可夫模型，如<a href="https://www.cs.cmu.edu/~ggordon/yudelson-koedinger-gordon-individualized-bayesian-knowledge-tracing.pdf" target="_blank" rel="noopener">贝叶斯知识追踪</a>(Bayesian Knowledge Tracing)，2015年 <a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Chris Piech</a> 等人提出利用深度学习来处理知识追踪的任务，之后引发了学者们对利用深度学习来处理知识追踪任务对不断探讨，下面依次介绍相关论文核心内容及思考。</p>
+<h2 id="Deep-Knowledge-Tracing"><a href="#Deep-Knowledge-Tracing" class="headerlink" title="Deep Knowledge Tracing"></a>Deep Knowledge Tracing</h2><p>循环神经网络（RNN）是一种时间序列的模型，天然具有高维连续的隐状态表示的特征，RNN能够利用早期的信息进行预测，因此在2015年 <a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Chris Piech</a> 将RNN应用于知识追踪领域，并取得了较好的结果。</p>
+<h3 id="模型："><a href="#模型：" class="headerlink" title="模型："></a>模型：</h3><p>文章中，作者采用了传统的RNN模型和其变种LSTM，其输入数据为经过编码的$q _ { t }$，输出为$a _ { t }$。对于输入的编码方式有两种：</p>
+<ol>
+<li>将输入进行one-hot编码，如模型输入数据涉及M个知识成分（如知识点），每道题有两种结果0，1（分别对应答错和答对），则模型输入长度为2M。例如，对于某题，其知识成分为i，若答对，对应输入为第i+1位为1其余位置为0；若答错，则第i位为1其余位置为0。</li>
+<li>将输入进行压缩，若知识成分M巨大时，输入维度过高，可以采用感知压缩使输入从2M降低至$\log (2 M)$。</li>
+</ol>
+<p>模型输出$y _ { t }$ 长度为M，对应描述了每一个知识成分的掌握程度（即对应知识成分所对应题目的答对概率），模型的核心为使用前$t$时刻的学生做题序列预测$t+1$时刻的知识成分的掌握情况，即：$P(y_{t+1}|x_{t} ,  \ldots \ldots , x _ { t })$。<br>模型的目标函数是观测序列的非负对数似然函数，假设 $\delta \left( q _ { t + 1 } \right)$为$t+1$时刻的编码输入，$l$为二进制交叉上函数，目标函数如下：<center> $L = \sum _ { t } \ell \left( \mathbf { y } _ { i } ^ { T } \delta \left( q _ { t + 1 } \right) , a _ { t + 1 } \right)$  </center> </p>
+<h3 id="模型优缺点："><a href="#模型优缺点：" class="headerlink" title="模型优缺点："></a>模型优缺点：</h3><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ol>
+<li>能够反应长时间的知识关系，基于RNN的特性能够根据学生近期学习表现进行预测（<a href="https://arxiv.org/pdf/1604.02416.pdf" target="_blank" rel="noopener">近因效应</a>），也能根据实际学生学习路径进行建模；</li>
+<li>能够对复杂的知识点之间的联系进行建模，如构建知识图谱；</li>
+<li>能够处理多知识成分的问题。<h5 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">缺点：</a></h5></li>
+<li>模型无法重构输入，即输入某一知识成分答题错误，模型对该知识成分的预测反而是正确。</li>
+<li>在时间序列上，学生对知识点的掌握程度不具有连续一致性，波动情况较大。</li>
+</ol>
+<h2 id="Going-Deeper-with-Deep-Knowledge-Tracing"><a href="#Going-Deeper-with-Deep-Knowledge-Tracing" class="headerlink" title="Going Deeper with Deep Knowledge Tracing"></a>Going Deeper with Deep Knowledge Tracing</h2><p>2016年<a href="http://www.educationaldatamining.org/EDM2016/proceedings/paper_133.pdf" target="_blank" rel="noopener">Xiaolu Xiong</a>等人对DKT和PFA(Performance Factor Analysis)，BKT(Bayesian Knowledge Tracing)模型进行了比较，对DKT模型能碾压其他两种模型的结果进行了怀疑并加以论证，进一步讨论了原论文能够得出上述结果的原因，对进一步使用DKT模型提供了参考。<br>文章中指出，对于DKT文章中在ASSISTments数据集上取得好的结果的原因进行了分析，得到以下三个原因来说明为什么DKT能够取得碾压BKT的效果：</p>
+<ol>
+<li>ASSISTments数据集中存在23.6%的重复数据，这部分数据应该舍弃而不应该用于训练或测试。</li>
+<li>DKT模型在实验中，并没有去除脚手架式的教学问题的做题记录，这就导致DKT模型能够有更多信息引入模型。</li>
+<li>由于DKT处理多知识成分的问题时，单条做题记录会被扩展成多条，存在重复利用数据的问题。</li>
+</ol>
+<p>作者将上述问题数据依次剔除，形成多个数据集，并采用ACU和$r ^ { 2 }$作指标，对DKT，PFA，BKT模型进行了对比，<strong>结果表明DKT相比BKT和PFA没有碾压式的超越但是的确会比其他模型结果要好</strong>。<br>文章中提及，当遇到多知识成分的题目时，使用联合知识成分作为新的知识成分的方式比重复利用做题记录的方式结果要差很多，这也是在我们实际使用DKT模型中需要注意的。</p>
+<h2 id="Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization"><a href="#Addressing-Two-Problems-in-Deep-Knowledge-Tracing-viaPrediction-Consistent-Regularization" class="headerlink" title="Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization"></a>Addressing Two Problems in Deep Knowledge Tracing viaPrediction-Consistent Regularization</h2><p><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">Chun-Kit Yeung</a>等人在2018年6月发表论文中指出DKT模型现存的缺点，<strong><em>即对输入序列存在重构问题和预测结果的波动性</em></strong>，进而论文提出了改善上述问题的方法：增加对应的正则项，得到<strong>DKT+</strong>（增强的DKT模型）。</p>
+<p><img src="/2019/08/06/深度知识追踪/2.png" alt="2"></p>
+<p>如上图所示，纵轴$S _ { i }$表示知识成分，横轴为学生在各个知识成分上的答题情况。<br>问题1对应的是在$6 ^ { t h }$step，$S _ { 45 }$的评估结果相比前一时刻是增加了的即使当前的输入是$S _ { 45 }$做错了的。<br>问题2对应为在上述图描述的学习过程中，$S _ { 32 } , S _ { 33 } , S _ { 45 }$和$S _ { 55 }$预测做对的概率随着 $S _ { 32 } , S _ { 33 }$的学习有着非常大的波动，这和我们实际情况是不相符的，我们总是期望知识成分的变化是随着时间缓慢变化的，而不是在掌握和没掌握之间跳跃。</p>
+<p>对于问题1，作者认为出现这种情况是由于，在DKT模型采用的损失函数中并没有考虑到时间t时刻的输入值，只是考虑了t时刻的输出值和t+1时刻的输入值。为了解决上述问题，作者在损失函数中引入正则项，并在正则项中引入了时间t时刻的输入值，正则项r如下：<center>$r = \frac { 1 } { \sum _ { i = 1 } ^ { n } \left( T _ { i } - 1 \right) } \left( \sum _ { i = 1 } ^ { n } \sum _ { t = 1 } ^ { T _ { i } - 1 } l \left( \mathbf { y } _ { t } ^ { i } \cdot \boldsymbol { \delta } \left( q _ { t } ^ { i } \right) , a _ { t } ^ { i } \right) \right)$</center></p>
+<p>对于问题2，作者认为可能是由于RNN的隐层表示问题，RNN的隐含层$\mathbf { h } _ { t }$依赖于前一隐含层的输出$\mathbf { h } _ { t -1}$和当前输入$\mathbf { x } _ { t }$，隐含层表示了潜在的学生知识掌握程度，但是很难说清隐含层的每个状态是如何影响对知识成分的预测。所以简答起见，直接对输出结果进行正则约束（L1，L2正则），使预测结果能够平滑输出，所加正则项如下：<center>$w _ { 1 } = \frac { \sum _ { i = 1 } ^ { n } \sum _ { t = 1 } ^ { T _ { i } - 1 } \left\| \mathbf { y } _ { t + 1 } ^ { i } - \mathbf { y } _ { t } ^ { i } \right\| _ { 1 } } { M \sum _ { i = 1 } ^ { n } \left( T _ { i } - 1 \right) }$</center><center>$w _ { 2 } ^ { 2 } = \frac { \sum _ { i = 1 } ^ { n } \sum _ { t = 1 } ^ { T _ { i } - 1 } \left\| \mathbf { y } _ { t + 1 } ^ { i } - \mathbf { y } _ { t } ^ { i } \right\| _ { 2 } ^ { 2 } } { M \sum _ { i = 1 } ^ { n } \left( T _ { i } - 1 \right) }$</center><br>综合上述正则项，最终模型的损失函数为：<center>$\mathcal { L } ^ { \prime } = \mathcal { L } + \lambda _ { r } r + \lambda _ { w _ { 1 } } w _ { 1 } + \lambda _ { w _ { 2 } } w _ { 2 } ^ { 2 }$</center></p>
+<h2 id="Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills"><a href="#Does-Deep-Knowledge-Tracing-Model-Interactions-Among-Skills" class="headerlink" title="Does Deep Knowledge Tracing Model Interactions Among Skills?"></a>Does Deep Knowledge Tracing Model Interactions Among Skills?</h2><p><a href="http://educationaldatamining.org/files/conferences/EDM2018/papers/EDM2018_paper_208.pdf" target="_blank" rel="noopener">Shirly Montero</a> 等人在2018EDM上发表的paper，通过对比DKT和BKT的不同，来分析得到为何DKT能够获得比较好的结果的原因，论文从三个方面进行了比较：1）模型规模上，DKT是一个具有多自由参数的神经网络模型，而BKT是一个概率模型，拥有有限的自由参数。2）DKT对一个领域内所有skill建模，而BKT是根据skill构造模型。3）DKT是多skill的交叉输入，而BKT是按照skill进行拆分的。最终得到的结论是1),3)是DKT取得好的效果的关键。<br>为验证，通过如下方式区分DKT和BKT的不同模型：</p>
+<ul>
+<li>DKT是随着时间的推移，所有的skill都是交织在一起的，并按照顺序对每个问题做预测，而BKT是根据技能单独做成对应的序列，这种区别对应于combined sequence (CS)和 separate sequence (SS)。</li>
+<li>DKT是通过一个model学习所有的skill，而BKT假设对每个skill训练单独的model，这种区别对应于combined model(CM) 和 separate model(SM)。</li>
+<li>DKT基于神经网络而BKT基于概率模型。因此DKT相比BKT拥有更多的自由变量。</li>
+</ul>
+<p>基于上述不同，作者分别采用了四种模型在三种数据集上做了验证，来证明是哪些特征使得DKT拥有比较好的效果，结果如下：</p>
+<p><img src="/2019/08/06/深度知识追踪/3.png" alt="3"><br>上述结果中BKT-SM-SS对应于标准的BKT模型，DKT-SM-SS是对不同对skill采用不同对model建模，对应的输入也是当前skill 的序列。DKT-CM-SS使用同一个model对所有skill做预测，区别于标准的DKT是输入是按照skill进行分割的。DKT-CM-CS则对应于标准的DKT模型。<br>通过上述结果我们可以得到：</p>
+<ul>
+<li>DKT可以通过交织的都skill序列获得增益。</li>
+<li>对比DKT-SM-SS和DKT-CM-SS的结果可以看到，通过一个模型对按照skill进行分割的数据做预测并不能得到增益。</li>
+<li>DKT并没有像BKT一样引入强人类学习理论，这或许可以解释简单的全有或全无的学习——没有遗忘的BKT假设的理论过于简单。</li>
+</ul>
+<h2 id="Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction"><a href="#Incorporating-Features-Learned-by-an-Enhanced-Deep-Knowledge-Tracing-Model-for-STEM-Non-STEM-Job-Prediction" class="headerlink" title="Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction"></a>Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</h2><p>该模型是<a href="https://arxiv.org/pdf/1604.02416.pdf" target="_blank" rel="noopener">Chun-Kit Yeung</a>等人在参加2017 ASSISTments Data Mining 竞赛中使用的方案，该竞赛是使用中学的学生行为预测高中/大学的结果。本文章在DKT和DKT+的基础上，使用了其他学生相关的综合特征，实验结果表明使用了其他特征的效果要比基础模型好。该文章为我们提供了引入其他学生行为特征的方法。<br>本文提出的模型主要思想是利用DKT+学习序列数据，得到$\mathbf { X }_{ K T}$代表学生的最新的知识状态，然后结合学生其他特征$\mathbf { X }_{ SP}$得到feature set$\mathbf { x } _ { f } = \left[ \mathbf { x } _ { S P } , \mathbf { x } _ { K T } \right]$送入机器学习模型(如GBDT， LR，LDA， SVM等)得到最终的预测结果。<br>上述模型的思想比较简单，可以看作集成模型Stacking的一种方式，整个模型的框架如下：<br><img src="/2019/08/06/深度知识追踪/4.png" alt="4"></p>
+<h2 id="Prerequisite-Driven-Deep-Knowledge-Tracing"><a href="#Prerequisite-Driven-Deep-Knowledge-Tracing" class="headerlink" title="Prerequisite-Driven Deep Knowledge Tracing"></a>Prerequisite-Driven Deep Knowledge Tracing</h2><p><a href="https://arxiv.org/pdf/1806.03256.pdf" target="_blank" rel="noopener">Penghe Chen</a>等人在使用DKT时考虑到数据的稀疏性(skill空间比较大，学生做题比较有限)，为解决由于数据稀疏性带来的模型评估不准确，提出了将知识结构的信息纳入模型来解决上述问题，具体是指考虑来知识的前后置关系。<br><strong>核心观点在于如果$K_1$是$K_2$的前置，则$K_2$的掌握程度要小于等于$K_1$，即后置的掌握程度要小于等于前置的掌握程度。</strong><br>具体过程如下：<br>如果$K_1$是$K_2$的前置，则：</p>
+<ul>
+<li>$P(M_{i,k_{2},t_{2}}=1)$很大，则$P(M_{i,k_{1},t_{1}}=1)$更大：<pre><code>  即学生i如果在$t_{2}$时刻掌握了$K_{2}$，则说明在前一时刻，学生已经掌握了其前置知识$K_1$；
+</code></pre></li>
+<li>$P(M_{i,k_{1},t_{1}}=1)$很小，则$P(M_{i,k_{2},t_{2}}=1)$更小：<pre><code>  即学生i如果在$t_{1}$时刻没有掌握$K_{1}$，则说明在下一时刻，学生更不可能掌握其后置知识$K_2$；
+</code></pre></li>
+</ul>
+<p>上述知识结构上的信息体现在model中是通过修改损失函数的方式实现的，具体损失函数如下：<center>$\max _ { \Theta } \log \prod _ { i } \prod _ { t } P \left( y _ { i , \pi ( i , t ) , t } | \mathbf { s } _ { i } , \Theta \right)$
+s.t. $P \left( m _ { i , k _ { 2 } , t _ { 2 } } = 1 \right) \leq P \left( m _ { i , k _ { 1 } , t _ { 1 } } = 1 \right)$
+$\quad \forall \left( k _ { 1 } , k _ { 2 } \right) \in E \& y _ { i , \pi \left( i , t _ { 1 } \right) , t _ { 1 } } = y _ { i , \pi \left( i , t _ { 2 } \right) , t _ { 2 } }$</center><br>对上述进行变形，将强约束变为弱正则引入模型，损失函数为：<center>$\max _ { \Theta } \sum _ { i } \sum _ { t } \log P \left( y _ { i , \pi ( i , t ) , t } | \mathbf { s } _ { i } ,             \Theta \right) +$
+$\lambda \sum _ { i } \sum _ { k _ { 1 } , k _ { 2 } } \sum _ { t } \sum _ { t _ { 2 } } \delta ( * ) \left[ \log P \left( m _ { i , k _ { 1 } , t _ { 1 } } \right) - \log P \left( m _ { i , k _ { 2 } , t _ { 2 } } \right) \right]$</center></p>
+<p>下面分两部分来解释上面的loss：</p>
+<ul>
+<li>第一部分，其中$\mathbf { s } _ { i }$表示学生i的做题序列，$\Theta$表示模型的所有参数，$\pi ( i , t )$表示学生i在t时刻回答的题目，$y _ { i , \pi ( i , t ) , t }$对应学生i在t时刻回答题目的answer，因此loss的第一部分是在给定模型和序列下的结果最大化。</li>
+<li>第二部分，对应于知识结构的前置约束，其中$\delta ( * ) =\delta \left( y _ { i , \pi \left( i , t _ { 1 } \right) , t _ { 1 } } = y _ { i , \pi \left( i , t _ { 2 } \right) , t _ { 2 } } \right)$，即只有前后两个时刻的answer一致且存在前后置关系时，第二部分的正则才会有效。</li>
+</ul>
+<p>最终实验结果表明，加入知识结构信息的model比原始DKT结果要好，具体详见paper。<br>(PS: 笔者在本公司的数据集上验证并没有得到提升😢)</p>
+<h2 id="EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction"><a href="#EKT-Exercise-aware-Knowledge-Tracing-for-Student-Performance-Prediction" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction"></a>EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</h2><p>这篇<a href="https://arxiv.org/pdf/1906.05658.pdf" target="_blank" rel="noopener">文章</a>很早就看到过，但是到2019年6月份才发表出来，本文章认为目前的知识追踪的model都只用了学生的做题信息，而其他的如知识概念或习题内容相关的知识并没有在model中引入，而引入这些信息是能够为模型的预测精度带来增益的，因此作者提出Exercise-Enhanced Recurrent Neural Network(EERNN)，在这个模型中，不仅使用了学生的做题记录，还引入了习题的文本信息。在EERNN中，作者使用RNN的隐变量来表征学生的学习轨迹，使用BiLSTM来学习习题的编码信息。在最终predict阶段，作者在EERNN基础上采用了两种策略，一种是EERNNM with Markov property,另一种是EERNNA with attention mechanism。最终为了追踪学生在各知识点上的掌握情况，作者将EERNN引入知识概念的信息引入得到Exercise-Aware Knowledge Tracing（EKT）。</p>
+<h3 id="模型：-1"><a href="#模型：-1" class="headerlink" title="模型："></a>模型：</h3><p>模型主要分两部分来描述，一是做预测的EERNN（EERNNM &amp; EERNNA），另一部分是追踪学生知识掌握情况的EKT。</p>
+<h4 id="EERNN"><a href="#EERNN" class="headerlink" title="EERNN"></a>EERNN</h4><p>EERNN的提出主要用于做学生performance的预测，基于不同的策略又分为EERNNM和EERNNA。网络结果如下图所示：</p>
+<p><img src="/2019/08/06/深度知识追踪/EERNN.jpg" alt="EERNN"></p>
+<p>从上图可以看出：EERNNM和EERNNA的区别主要在prediction阶段，图中橘色框表示的是题目的embeddig，蓝色框表示的是学生的embedding。</p>
+<h5 id="Exercise-embedding"><a href="#Exercise-embedding" class="headerlink" title="Exercise embedding:"></a>Exercise embedding:</h5><p>Exercise embedding的获取是通过双向LSTM得到的，结构如下：<br><img src="/2019/08/06/深度知识追踪/EERNN-1.jpg" alt="EERNN"></p>
+<p>通过上述可以得到每个word的embedding $v_{m}=$ concatenate $\left(\vec{v}_{m}, \overleftarrow v_{m}\right)$，最终Exercise的embedding是通过max-pooling每个word的embedding得到，即$x_{i}=\max \left(v_{1}, v_{2}, \ldots, v_{M}\right) x_{i} \in \mathbb{R}^{2 d_{v}}$。</p>
+<h5 id="Student-Embedding："><a href="#Student-Embedding：" class="headerlink" title="Student Embedding："></a>Student Embedding：</h5><p>表征学生的向量应该跟题目和学生的回答有关，因此作者在上面获得$x_{i}$的基础上加入了表示学生作答情况的信息，通过RNN/LSTM得到student embedding，具体实现是首先将$r_{t}$表示成一个$2 d_{v}$维的$\mathbf{0}=(0,0, \ldots, 0)$，最终输入$\widetilde{x}_{t} \in \mathbb{R}^{4 d_{v}}$表示为：<center>$\widetilde{x}_{t}=\left\{\begin{array}{ll}{\left[x_{t} \oplus \mathbf{0}\right]} & {\text { if } r_{t}=1} \\ {\left[\mathbf{0} \oplus x_{t}\right]} & {\text { if } \quad r_{t}=0}\end{array}\right.$</center></p>
+<h5 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h5><ul>
+<li><p>EERNNM:</p>
+<p>基于markov性，下一时刻状态的条件概率分布只与当前状态有关，因此对$\widetilde{r}_{T+1}$的预测只与$h_{T}$和$x_{T+1}$有关，因此计算公式如下：<center>$\begin{aligned} y_{T+1} &=\operatorname{Re} L U\left(\mathbf{W}_{1} \cdot\left[h_{T} \oplus x_{T+1}\right]+\mathbf{b}_{1}\right) \\ \widetilde{r}_{T+1} &=\sigma\left(\mathbf{W}_{2} \cdot y_{T+1}+\mathbf{b}_{2}\right) \end{aligned}$   ... (1)</center></p>
+</li>
+<li><p>EERNNA<br>如果序列很长的话，LSTM捕捉信息的能力会降低，因此为了改善上述问题，引入常用的Attention机制。<br>经过attention后的表征当前状态的隐变量变为：<center>$h_{a t t}=\sum_{j=1}^{T} \alpha_{j} h_{j} \\ \alpha_{j}=\cos \left(x_{T+1}, x_{j}\right)$</center><br>将(1)式中的$h_{a t t}$替换$h_{T}$即可得到预测结果。</p>
+</li>
+</ul>
+<h4 id="EKT-Exercise-aware-Knowledge-Tracing"><a href="#EKT-Exercise-aware-Knowledge-Tracing" class="headerlink" title="EKT: Exercise-aware Knowledge Tracing"></a>EKT: Exercise-aware Knowledge Tracing</h4><p>EKT本质做的是将原始EERNN学习到的学生状态从$h_{t} \in \mathbb{R}^{d_{h}}$变换成$\dot{H}_{t} \in \mathbb{R}^{\dot{d}_{h} \times K}$，也就是说用一个向量来表征学生对某个知识的掌握情况。模型结构如下图所示：<br><img src="/2019/08/06/深度知识追踪/EKT.jpg" alt="EKT"><br>与EERNN相比，除了使用到Exercise Embedding还用到了Knowledge Embedding（对应图中绿色的部分）。</p>
+<h5 id="Knowledge-Embedding："><a href="#Knowledge-Embedding：" class="headerlink" title="Knowledge Embedding："></a>Knowledge Embedding：</h5><p>由于知识之间是相关的而非独立的，因此作者引入了memory module来计算当前的知识点与其他知识点的相关性，并最终影响到学生知识状态的隐变量，其中知识间的相关性是通过$\beta_{t}^{i}$实现的。如图中标注，k（K维，K表示所有知识点）表示当前时刻题目对应的知识点的one-hot编码，v（$d_{k}$维）则是将k进行地位压缩后的编码向量$v_{t}=\mathbf{W}_{\mathbf{k}}^{\mathrm{T}} k_{t}$，通过memory module（本质上是一个$d_{k} \times  K$的矩阵），最终$\beta_{t}^{i}$计算公式如下：<center>$\beta_{t}^{i}=\operatorname{Softmax}\left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)=\frac{\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)}{\sum_{i=1}^{K}\left(\exp \left(v_{t}^{\mathrm{T}} \mathbf{M}_{i}\right)\right)}$</center><br>最终隐状态表示为：<br>$H_{t}^{i}=L S T M\left(\widetilde{x}_{t}^{i}, H_{t-1}^{i} ; \theta_{H^{i}}\right)$，<br>其中$\widetilde{x}_{t}^{i}=\beta_{t}^{i} \hat{x}_{t}$。</p>
+<h2 id="A-Self-Attentive-model-for-Knowledge-Tracing"><a href="#A-Self-Attentive-model-for-Knowledge-Tracing" class="headerlink" title="A Self-Attentive model for Knowledge Tracing"></a>A Self-Attentive model for Knowledge Tracing</h2><p>该模型是<a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">Shalini Pandey</a>等人在2019年7月post出来的论文，核心就是将Transformer引入只是追踪领域代替LSTM/RNN。该论文将Transformer引入后的model称为SAKT，模型架构如下：</p>
+<p> <img src="/2019/08/06/深度知识追踪/SAKT.jpg" alt="SAKT"></p>
+<p>模型的核心架构跟Transformer一致（对于Transformer的结构和理解，这里不多讲，请自行学习），都主要包括multi-head attention (对应文章的self-attention layer)，feed forward layer, residual connections, layer normalization 和prediction layer。重点的区别在于attention layer的输入embedding上。Transormer的输入是input经过embedding再加上Position Encoding，而本文章的输入有两部分， 一部分是用户reation的，即用户做了哪些题目以及做对做错$\mathbf{x}_{t}=\left(e_{t}, r_{t}\right)$,其中$e_{t}$表示t时刻学生做的题目，$r_{t}$表示学生t时刻的做题正误； 另一部分仅仅是题目即$e_{t}$，作者用$x_{i}$的embedding作为key和value，而$e_{t}$作为query，具体如下图所示：</p>
+<p> <img src="/2019/08/06/深度知识追踪/SAKT-1.jpg" alt="SAKT"></p>
+<p>上图中，$x_{i}$经过interaction Embedding（通过Embedding Table ）得到embedding $\mathbf{M} \in \mathbb{R}^{2 E \times d}$，再经过Position Encodiing得到包含位置信息的embedding $\mathbb{P}$，最终输入Attention Layer的输入为$\hat{\mathbf{M}} = \mathbf{M} + \hat{\mathbf{P}}$。</p>
+<p>而$e_{t}$通过Question Embedding（Embedding table）得到$\mathbf{E} \in \mathbb{R}^{E \times d}$,没有经过Position Encodiing，最终<br>$\hat{\mathbf{E}} = \mathbb{E}$。</p>
+<p>在Attention Layer计算Attention score时，$\mathbf{Q}=\hat{\mathbf{E}} \mathbf{W}^{Q}, \mathbf{K}=\hat{\mathbf{M}} \mathbf{W}^{K}, \mathbf{V}=\hat{\mathbf{M}} \mathbf{W}^{V}$,即Key=Value‡Query。 与Transformer的 Query= Key= Value不同。</p>
+<h3 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h3><p>论文最后对比了当前深度知识追踪中比较常见的集中模型，结果如下：</p>
+<p> <img src="/2019/08/06/深度知识追踪/SAKT-2.jpg" alt="SAKT"></p>
+<h3 id="感想："><a href="#感想：" class="headerlink" title="感想："></a>感想：</h3><p>早在Transformer发表之初，笔者就将Transformer引入知识追踪，所以上述文章的创新性感觉一般，但是值得思考的是为什么作者在计算attention score时Key‡Query,以及实现时，多层堆叠下的输入问题。</p>
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a>参考文献:</h2><ol>
+<li><a href="https://arxiv.org/pdf/1506.05908.pdf" target="_blank" rel="noopener">Deep Knowledge Tracing</a></li>
+<li><a href="https://arxiv.org/pdf/1806.02180.pdf" target="_blank" rel="noopener">Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization</a></li>
+<li><a href="http://www.educationaldatamining.org/EDM2016/proceedings/paper_133.pdf" target="_blank" rel="noopener">Going Deeper with Deep Knowledge Tracing </a></li>
+<li><a href="https://arxiv.org/pdf/1604.02416.pdf" target="_blank" rel="noopener">How Deep is Knowledge Tracing?</a></li>
+<li><a href="https://arxiv.org/pdf/1806.03256.pdf" target="_blank" rel="noopener">Incorporating Features Learned by an Enhanced Deep Knowledge Tracing Model for STEM/Non-STEM Job Prediction</a></li>
+<li><a href="http://educationaldatamining.org/files/conferences/EDM2018/papers/EDM2018_paper_208.pdf" target="_blank" rel="noopener">Does Deep Knowledge Tracing Model Interactions Among Skills?</a></li>
+<li><a href="https://aic-fe.bnu.edu.cn/docs/20190109161907836283.pdf" target="_blank" rel="noopener">Prerequisite-Driven Deep Knowledge Tracing</a></li>
+<li><a href="https://arxiv.org/pdf/1907.06837.pdf" target="_blank" rel="noopener">A Self-Attentive model for Knowledge Tracing</a></li>
+<li><a href="https://arxiv.org/pdf/1906.05658.pdf" target="_blank" rel="noopener">EKT: Exercise-aware Knowledge Tracing for Student Performance Prediction</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/06/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zoe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据挖掘日常笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/06/hello-world/" itemprop="url">Hello World</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-06T17:00:24+08:00">
+                2019-08-06
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-08-06T17:00:24+08:00">
+                2019-08-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  73
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Zoe">
+            
+              <p class="site-author-name" itemprop="name">Zoe</p>
+              <p class="site-description motion-element" itemprop="description">Every failure is leading towards success.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zoe</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">19.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
